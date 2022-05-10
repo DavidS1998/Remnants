@@ -1,15 +1,11 @@
 package com.falls.remnants.ui.home
 
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
@@ -35,13 +31,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        val textView: TextView = binding.textHome
-//        homeViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
-        ////////////////
-        activity?.actionBar?.elevation = 0f
-
+        // Create viewpager
         val pageAdapter = AdapterTabPager(activity as FragmentActivity)
         val viewPager: ViewPager2 = binding.viewpager
         viewPager.apply {
@@ -49,19 +39,19 @@ class HomeFragment : Fragment() {
         }
         viewPager.adapter = pageAdapter
 
-        val tab1 = TabOneFragment()
-        val tab2 = TabTwoFragment()
-
+        // Initialize and add tab fragments
+        val tab1 = TabSeasonalListFragment()
         pageAdapter.addFragment(tab1, "Tab 1")
+        val tab2 = TabTopFragment()
         pageAdapter.addFragment(tab2, "Tab 2")
 
         // TabLayout
         val tabs = binding.tabsLayout
         TabLayoutMediator(tabs, binding.viewpager) { tab, position ->
             tab.text = when (position) {
-                // TODO: Programatically set the tab text from page adapter
-                0 -> "Hello"
-                1 -> "World"
+                // TODO: Programmatically set the tab text from page adapter
+                0 -> "Popular this season"
+                1 -> "Top rated"
                 else -> "What"
             }
         }.attach()
@@ -75,6 +65,7 @@ class HomeFragment : Fragment() {
     }
 }
 
+// ViewPager class for the tab fragments
 class AdapterTabPager(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
 
     private val mFragmentList: MutableList<Fragment> = ArrayList()

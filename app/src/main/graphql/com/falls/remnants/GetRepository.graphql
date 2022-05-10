@@ -1,0 +1,55 @@
+query SeasonalQuery($season: MediaSeason!, $year: Int!, $pageNumber: Int!) {
+    page: Page(page: $pageNumber, perPage: 50) {
+        pageInfo {
+            hasNextPage
+        }
+        media(season: $season, seasonYear: $year, sort: POPULARITY_DESC, isAdult: false, status: RELEASING)  {
+            id
+            title {
+                romaji
+                english
+            }
+            format
+            coverImage {
+                extraLarge
+                large
+                medium
+                color
+            }
+            bannerImage
+            nextAiringEpisode {
+                episode
+                timeUntilAiring
+            }
+            episodes
+        }
+    }
+}
+
+query TopAllQuery($pageNumber: Int!) {
+    page: Page(page: $pageNumber, perPage: 50) {
+        pageInfo {
+            hasNextPage
+        }
+        media(sort: SCORE_DESC, isAdult: false)  {
+            id
+            title {
+                romaji
+                english
+            }
+            format
+            coverImage {
+                extraLarge
+                large
+                medium
+                color
+            }
+            nextAiringEpisode {
+                episode
+                timeUntilAiring
+            }
+            bannerImage
+            episodes
+        }
+    }
+}

@@ -1,31 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <data>
+        <variable
+            name="anime"
+            type="com.falls.remnants.data.Anime" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/media_cover"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            app:layout_constraintDimensionRatio="0.7:1"
+
+            android:contentDescription="@string/media_cover_image"
+            app:ImageUrl="@{anime.coverPath}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@tools:sample/avatars"
+            tools:layout_width="210dp"/>
+
+        <!--Gradient behind title-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="90dp"
+            android:background="@drawable/transparent_gradient"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="@+id/media_cover"
+            app:layout_constraintEnd_toEndOf="@+id/media_cover"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/media_title"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#33000000"
+            android:padding="8dp"
+            android:textSize="16sp"
+            android:text="@{anime.engTitle}"
             android:textColor="#FFFFFF"
-            tools:text="Media"/>
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintBottom_toBottomOf="@+id/media_cover"
+            app:layout_constraintEnd_toEndOf="@+id/media_cover"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Some Light Novel Titles Can Get Really Long Like This One"
+            android:maxLines="3"/>
+
+        <TextView
+            android:id="@+id/next_episode"
+            android:layout_width="match_parent"
+            tools:layout_width="210dp"
+            android:layout_height="34dp"
+
+            text="@{anime.nextEpisode + anime.nextEpisodeCountdown}"
+            tools:text="Episode 5"
+            android:background="#99000000"
+            android:textColor="#FFFFFF"
+            android:padding="8dp"
+
+            app:layout_constraintEnd_toEndOf="@+id/media_cover"
+            app:layout_constraintTop_toTopOf="@+id/media_cover" />
+
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="match_parent"
+            tools:layout_width="210dp"
+            android:layout_height="34dp"
+
+            text="@{anime.format}"
+            tools:text="TV"
+            android:textAlignment="textEnd"
+            android:textColor="#FFFFFF"
+            android:padding="8dp"
+
+            app:layout_constraintEnd_toEndOf="@+id/media_cover"
+            app:layout_constraintTop_toTopOf="@+id/media_cover" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
