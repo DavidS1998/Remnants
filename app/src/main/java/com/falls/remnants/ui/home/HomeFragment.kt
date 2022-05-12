@@ -1,16 +1,19 @@
 package com.falls.remnants.ui.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NavUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
+import com.falls.remnants.R
 import com.falls.remnants.databinding.FragmentHomeBinding
 import com.google.android.material.tabs.TabLayoutMediator
+import timber.log.Timber
+
 
 class HomeFragment : Fragment() {
 
@@ -20,26 +23,26 @@ class HomeFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    private lateinit var viewPager: ViewPager2
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
         // Create viewpager
         val pageAdapter = AdapterTabPager(activity as FragmentActivity)
-        val viewPager: ViewPager2 = binding.viewpager
+        viewPager = binding.viewpager
         viewPager.apply {
             adapter = pageAdapter
         }
         viewPager.adapter = pageAdapter
 
-        // Initialize and add tab fragments
+//      Initialize and add tab fragments
         val tab1 = TabSeasonalListFragment()
         pageAdapter.addFragment(tab1, "Tab 1")
         val tab2 = TabTopFragment()

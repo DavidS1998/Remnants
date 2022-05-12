@@ -8,11 +8,13 @@ import com.falls.remnants.data.Anime
 import com.falls.remnants.databinding.ItemMediaEntryBinding
 
 // Boilerplate adapter code
-class SeasonalListAdapter() : ListAdapter<Anime, SeasonalListAdapter.SeasonalListViewHolder>(SeasonalListDiffCallback()) {
+class SeasonalListAdapter(private val seasonalListClickListener: SeasonalListClickListener) : ListAdapter<Anime, SeasonalListAdapter.SeasonalListViewHolder>(SeasonalListDiffCallback()) {
 
     class SeasonalListViewHolder(private var binding: ItemMediaEntryBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Anime) {
+
+        fun bind(item: Anime, seasonalListClickListener: SeasonalListClickListener) {
             binding.anime = item
+            binding.clickListener = seasonalListClickListener
             binding.executePendingBindings()
         }
 
@@ -26,7 +28,7 @@ class SeasonalListAdapter() : ListAdapter<Anime, SeasonalListAdapter.SeasonalLis
     }
 
     override fun onBindViewHolder(holder: SeasonalListViewHolder, position: Int) {
-        return holder.bind(getItem(position))
+        return holder.bind(getItem(position), seasonalListClickListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeasonalListViewHolder {
@@ -42,4 +44,8 @@ class SeasonalListDiffCallback : androidx.recyclerview.widget.DiffUtil.ItemCallb
     override fun areContentsTheSame(oldItem: Anime, newItem: Anime): Boolean {
         return oldItem == newItem
     }
+}
+
+class SeasonalListClickListener(val clickListener: (anime: Anime) -> Unit) {
+    fun onClick(anime: Anime) = clickListener(anime)
 }

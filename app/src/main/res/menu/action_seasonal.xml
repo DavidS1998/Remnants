@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/now"
+        android:title="Current"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/prev_season"
+        android:icon="@drawable/ic_baseline_navigate_previous_24"
+        android:title="Previous Season"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/next_season"
+        android:icon="@drawable/ic_baseline_navigate_next_24"
+        android:title="Next Season"
+        app:showAsAction="always"/>
+
+    <item
+        android:id="@+id/span_size"
+        android:title="Columns"
+        app:showAsAction="never"/>
+</menu>

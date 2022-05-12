@@ -3,7 +3,7 @@ query SeasonalQuery($season: MediaSeason!, $year: Int!, $pageNumber: Int!) {
         pageInfo {
             hasNextPage
         }
-        media(season: $season, seasonYear: $year, sort: POPULARITY_DESC, isAdult: false, status: RELEASING)  {
+        media(season: $season, seasonYear: $year, sort: POPULARITY_DESC, isAdult: false, type: ANIME) {
             id
             title {
                 romaji
@@ -16,12 +16,12 @@ query SeasonalQuery($season: MediaSeason!, $year: Int!, $pageNumber: Int!) {
                 medium
                 color
             }
-            bannerImage
             nextAiringEpisode {
                 episode
                 timeUntilAiring
             }
             episodes
+            status
         }
     }
 }
@@ -44,12 +44,23 @@ query TopAllQuery($pageNumber: Int!) {
                 medium
                 color
             }
-            nextAiringEpisode {
-                episode
-                timeUntilAiring
-            }
+            averageScore
+            meanScore
             bannerImage
             episodes
         }
+    }
+}
+
+query Details($id: Int!) {
+    anime: Media(id: $id) {
+        title {
+            romaji
+            english
+        }
+        bannerImage
+        averageScore
+        meanScore
+        episodes
     }
 }

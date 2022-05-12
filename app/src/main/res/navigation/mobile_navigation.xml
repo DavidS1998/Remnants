@@ -9,7 +9,11 @@
         android:id="@+id/navigation_home"
         android:name="com.falls.remnants.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_navigation_home_to_animeDetailsFragment"
+            app:destination="@id/animeDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
@@ -22,4 +26,20 @@
         android:name="com.falls.remnants.ui.notifications.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
+    <fragment
+        android:id="@+id/animeDetailsFragment"
+        android:name="com.falls.remnants.ui.details.AnimeDetailsFragment"
+        android:label="AnimeDetailsFragment" >
+        <argument
+            android:name="Anime"
+            app:argType="com.falls.remnants.data.Anime" />
+    </fragment>
+    <fragment
+        android:id="@+id/tabSeasonalListFragment"
+        android:name="com.falls.remnants.ui.home.TabSeasonalListFragment"
+        android:label="TabSeasonalListFragment" >
+        <action
+            android:id="@+id/action_tabSeasonalListFragment_to_animeDetailsFragment"
+            app:destination="@id/animeDetailsFragment" />
+    </fragment>
 </navigation>

@@ -9,7 +9,6 @@ open class GraphQLapi {
         private var INSTANCE: ApolloClient? = null
 
         fun getInstance(): ApolloClient {
-            // TODO: Rate limiter
 
             return INSTANCE ?: synchronized(this) {
                 val created = ApolloClient.Builder()
