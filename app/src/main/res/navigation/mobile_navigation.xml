@@ -40,6 +40,8 @@
         android:label="TabSeasonalListFragment" >
         <action
             android:id="@+id/action_tabSeasonalListFragment_to_animeDetailsFragment"
-            app:destination="@id/animeDetailsFragment" />
+            app:destination="@id/animeDetailsFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
     </fragment>
 </navigation>

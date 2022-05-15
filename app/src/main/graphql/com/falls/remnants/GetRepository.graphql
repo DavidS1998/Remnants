@@ -52,15 +52,34 @@ query TopAllQuery($pageNumber: Int!) {
     }
 }
 
-query Details($id: Int!) {
+query DetailsQuery($id: Int!) {
     anime: Media(id: $id) {
+        id
         title {
             romaji
             english
         }
         bannerImage
+        coverImage {
+            extraLarge
+            large
+            medium
+            color
+        }
         averageScore
-        meanScore
         episodes
+        description
+        format
+        startDate {
+            year
+            month
+            day
+        }
+        endDate {
+            year
+            month
+            day
+        }
+        status
     }
 }

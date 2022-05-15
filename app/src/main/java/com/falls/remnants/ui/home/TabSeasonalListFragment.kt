@@ -2,8 +2,12 @@ package com.falls.remnants.ui.home
 
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,12 +20,11 @@ import com.falls.remnants.recycler.SeasonalListClickListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import timber.log.Timber
 
-
 class TabSeasonalListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentSeasonalListBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: TabSeasonalListViewModel
+    private val viewModel: TabSeasonalListViewModel by activityViewModels()
     private lateinit var adapter: SeasonalListAdapter
 
     override fun onCreateView(
@@ -29,10 +32,6 @@ class TabSeasonalListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentSeasonalListBinding.inflate(inflater, container, false)
-
-        // Initialize the viewmodel
-        val application = requireNotNull(this.activity).application
-        viewModel = TabSeasonalListViewModel(binding, application)
 
         // Recycler view
         adapter = SeasonalListAdapter(SeasonalListClickListener { anime ->
@@ -45,10 +44,7 @@ class TabSeasonalListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
                 adapter.submitList(anime)
             }
         }
-
         binding.viewModel = viewModel
-        //viewModel.columns.observe(viewLifecycleOwner) { columns ->
-
 
         // Navigate to details
         viewModel.navigateToDetail.observe(viewLifecycleOwner) { anime ->
@@ -75,82 +71,25 @@ class TabSeasonalListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
                     viewModel.getMedia()
                 }
             }
-
-            // Hide toolbar when scrolling?
-//            @SuppressLint("RestrictedApi")
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-//                super.onScrolled(recyclerView, dx, dy)
-//
-//                if (dy > 0) {
-////                    toolbar.hide()
-//
-//                } else if (dy < 0) {
-////                    toolbar.show()
-//                }
-//            }
         }
         binding.seasonalListRV.addOnScrollListener(scrollListener)
 
-        // Swipe to refresh
-        binding.swipeRefreshLayout.setOnRefreshListener(this)
+        // Set visible column count
+        viewModel.columns.observe(viewLifecycleOwner) { columns ->
+            binding.seasonalListRV.layoutManager =
+                GridLayoutManager(requireContext(), columns + 1)
+            onRefresh()
+        }
 
-        setToolbar()
+        // Pull to refresh
+        binding.swipeRefreshLayout.setOnRefreshListener(this)
 
         return binding.root
     }
 
-    private fun setToolbar() {
-        // TODO: Season: Year
-        binding.toolbar.title = viewModel.getSeasonYear()
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        setHasOptionsMenu(true)
-    }
-
+    // For pull to refresh
     override fun onRefresh() {
-        Timber.d("Refreshing...")
         viewModel.refreshList()
         binding.swipeRefreshLayout.isRefreshing = false
-    }
-
-    override fun onResume() {
-        setToolbar()
-
-        super.onResume()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.action_seasonal, menu)
-
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        return when (item.itemId) {
-            R.id.next_season -> { viewModel.nextSeason() ; setToolbar() ; true }
-            R.id.prev_season -> { viewModel.prevSeason() ; setToolbar() ; true }
-            R.id.now ->         { viewModel.currentSeason() ; setToolbar() ; true }
-            R.id.span_size ->   { sliderDialog() ; true }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-
-    // Select view mode
-    private var columns = 2
-    private fun sliderDialog() {
-        val singleItems = arrayOf("1", "2", "3", "4", "5", "6", "7", "8")
-
-        MaterialAlertDialogBuilder(requireContext(),
-            com.google.android.material.R.style.Base_ThemeOverlay_AppCompat_Dialog)
-            .setTitle("Number of columns to display")
-            .setPositiveButton("CONFIRM", null)
-            .setSingleChoiceItems(singleItems, columns-1) { item, which ->
-                binding.seasonalListRV.layoutManager = GridLayoutManager(requireContext(), which+1)
-                columns = which+1
-            }
-            .show()
     }
 }

@@ -1,5 +1,6 @@
 package com.falls.remnants.ui.home
 
+import android.annotation.SuppressLint
 import android.app.Application
 import androidx.lifecycle.*
 import com.apollographql.apollo3.api.ApolloResponse
@@ -14,9 +15,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 
-class TabSeasonalListViewModel(
-    private val binding: FragmentSeasonalListBinding, application: Application
-) : AndroidViewModel(application) {
+class TabSeasonalListViewModel : ViewModel() {
 
     // List of entries
     private val _anime = MutableLiveData<List<Anime>>()
@@ -30,6 +29,8 @@ class TabSeasonalListViewModel(
     private var _navigateToDetail = MutableLiveData<Anime>()
     val navigateToDetail: LiveData<Anime>
         get() = _navigateToDetail
+
+    var columns = MutableLiveData(2-1)
 
     private var _pagesLoaded = 0
     private var _hasNextPage = true
@@ -150,6 +151,7 @@ class TabSeasonalListViewModel(
         _navigateToDetail.value = anime
     }
 
+    @SuppressLint("NullSafeMutableLiveData")
     fun onNavigatedToDetail() {
         _navigateToDetail.value = null
     }
