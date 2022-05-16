@@ -30,9 +30,9 @@ class AnimeDetailsViewModel(private val binding: FragmentAnimeDetailsBinding, ap
             // Execute and post query
             val response: ApolloResponse<DetailsQuery.Data>
             try {
-                response = GraphQLapi.getInstance().query(
-                    DetailsQuery(id)
-                ).execute()
+                response = GraphQLapi.getInstance()
+                    .query(DetailsQuery(id))
+                    .execute()
             } catch (e: ApolloException) {
                 Timber.e(e)
                 return@launch
@@ -43,13 +43,14 @@ class AnimeDetailsViewModel(private val binding: FragmentAnimeDetailsBinding, ap
             // Formatting
             val data = response.data?.anime
             val formatted = Anime(
-                    id = data?.id ?: -1,
-                    engTitle = data?.title?.english ?: "",
-                    japTitle = data?.title?.romaji ?: "",
-                    score = if ((data?.averageScore).toString() == "null") "N/A" else data?.averageScore.toString(),
-                    bannerPath = data?.bannerImage ?: "",
-                    coverPath = data?.coverImage?.extraLarge?: data?.coverImage?.large ?: data?.coverImage?.medium ?: "",
-                    description = data?.description ?: "",
+                id = data?.id!!,
+                engTitle = data.title?.english ?: data.title?.romaji ?: "",
+                japTitle =  if (data.title?.romaji.equals(data.title?.english ?: data.title?.romaji)) "" // If same, empty
+                            else data.title?.romaji?: "",
+                score = if ((data.averageScore).toString() == "null") "N/A" else data.averageScore.toString(),
+                bannerPath = data.bannerImage ?: "",
+                coverPath = data.coverImage?.extraLarge?: data.coverImage?.large ?: data.coverImage?.medium ?: "",
+                description = data.description ?: "",
                 )
 
             // Append data to any pre-existing data

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="anime"
+            type="com.falls.remnants.data.Anime" />
+
+        <variable
+            name="clickListener"
+            type="com.falls.remnants.recycler.AdapterClickListener"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> clickListener.onClick(anime)}">
+
+        <ImageView
+            android:id="@+id/media_cover"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="0.7:1"
+            android:contentDescription="@string/media_cover_image"
+            app:ImageUrl="@{anime.coverPath}"
+            tools:srcCompat="@tools:sample/avatars"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_width="210dp"/>
+
+        <!--Gradient behind title-->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="90dp"
+            android:background="@drawable/transparent_gradient"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="@+id/media_cover"
+            app:layout_constraintEnd_toEndOf="@+id/media_cover"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/media_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textSize="16sp"
+            android:text="@{anime.engTitle}"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="@+id/media_cover"
+            app:layout_constraintEnd_toEndOf="@+id/media_cover"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Some Light Novel Titles Can Get Really Long Like This One"
+            android:maxLines="3"/>
+
+        <TextView
+            android:id="@+id/next_episode"
+            android:layout_width="match_parent"
+            tools:layout_width="210dp"
+            android:layout_height="34dp"
+
+            text="@{anime.nextEpisode}"
+            tools:text="Episode 5"
+            android:background="#99000000"
+            android:textColor="#FFFFFF"
+            android:padding="8dp"
+
+            app:layout_constraintEnd_toEndOf="@+id/media_cover"
+            app:layout_constraintTop_toTopOf="@+id/media_cover" />
+
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="match_parent"
+            tools:layout_width="210dp"
+            android:layout_height="34dp"
+
+            text="@{anime.format}"
+            tools:text="TV"
+            android:textAlignment="textEnd"
+            android:textColor="#FFFFFF"
+            android:padding="8dp"
+
+            app:layout_constraintEnd_toEndOf="@+id/media_cover"
+            app:layout_constraintTop_toTopOf="@+id/media_cover" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

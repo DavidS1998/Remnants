@@ -10,7 +10,7 @@
 
         <variable
             name="clickListener"
-            type="com.falls.remnants.recycler.SeasonalListClickListener"/>
+            type="com.falls.remnants.recycler.AdapterClickListener"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -58,13 +58,13 @@
             android:maxLines="3"/>
 
         <TextView
-            android:id="@+id/next_episode"
+            android:id="@+id/score"
             android:layout_width="match_parent"
             tools:layout_width="210dp"
             android:layout_height="34dp"
 
-            text="@{anime.nextEpisode}"
-            tools:text="Episode 5"
+            text="@{anime.score + ` / 100`}"
+            tools:text="74 / 100"
             android:background="#99000000"
             android:textColor="#FFFFFF"
             android:padding="8dp"

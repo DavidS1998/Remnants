@@ -1,4 +1,4 @@
-package com.falls.remnants.ui.notifications
+package com.falls.remnants.ui.tools
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,8 +1,8 @@
-package com.falls.remnants.ui.home
+package com.falls.remnants.ui.browse
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -10,15 +10,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.falls.remnants.R
-import com.falls.remnants.databinding.FragmentHomeBinding
+import com.falls.remnants.data.Utils
+import com.falls.remnants.databinding.FragmentBrowseBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
-import timber.log.Timber
 
 
-class HomeFragment : Fragment() {
+class BrowseFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentBrowseBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -26,7 +26,15 @@ class HomeFragment : Fragment() {
 
     private lateinit var viewPager: ViewPager2
     private lateinit var pageAdapter: AdapterTabPager
-    private val viewModel: TabSeasonalListViewModel by activityViewModels()
+    private val viewModel: BrowseViewModel by activityViewModels()
+
+    override fun onAttach(activity: Activity) {
+        // Apply settings
+        val value = Utils.getSharedSettings(requireActivity(), "columns")
+        viewModel.columns.value = value.toIntOrNull() ?: 1
+
+        super.onAttach(activity)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +42,11 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentBrowseBinding.inflate(inflater, container, false)
+
+        // Retrieve settings from shared preferences
+//        val value = Utils.getSharedSettings(requireActivity(), "columns")
+//        viewModel.columns.value = value.toIntOrNull() ?: 1
 
         // Create viewpager
         pageAdapter = AdapterTabPager(activity as FragmentActivity)
@@ -54,18 +66,21 @@ class HomeFragment : Fragment() {
         )
 
 //      Initialize and add tab fragments
-        val tab1 = TabSeasonalListFragment()
-        pageAdapter.addFragment(tab1, "Popular")
-        val tab2 = TabTopFragment()
-        pageAdapter.addFragment(tab2, "Top")
+        val tab1 = TabSeasonalFragment()
+        pageAdapter.addFragment(tab1)
+        val tab2 = TabUpcomingFragment()
+        pageAdapter.addFragment(tab2)
+        val tab3 = TabTopFragment()
+        pageAdapter.addFragment(tab3)
 
         // TabLayout
         val tabs = binding.tabsLayout
         TabLayoutMediator(tabs, binding.viewpager) { tab, position ->
             tab.text = when (position) {
                 // TODO: Programmatically set the tab text from page adapter
-                0 -> "Popular by season"
-                1 -> "Top rated"
+                0 -> "Seasonal"
+                1 -> "Upcoming"
+                2 -> "Top rated"
                 else -> "What"
             }
         }.attach()
@@ -77,7 +92,8 @@ class HomeFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         when (viewPager.currentItem) {
             0 -> inflater.inflate(R.menu.action_seasonal, menu)
-//            1 -> inflater.inflate(R.menu.action_seasonal, menu)
+            1 -> inflater.inflate(R.menu.action_generic_list, menu)
+            2 -> inflater.inflate(R.menu.action_generic_list, menu)
         }
 
         super.onCreateOptionsMenu(menu, inflater)
@@ -122,6 +138,11 @@ class HomeFragment : Fragment() {
             }
             1 -> {
                 (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+                binding.toolbar.title = "UPCOMING"
+                setHasOptionsMenu(true)
+            }
+            2 -> {
+                (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
                 binding.toolbar.title = "TOP RATED"
                 setHasOptionsMenu(true)
             }
@@ -139,16 +160,14 @@ class HomeFragment : Fragment() {
         )
             .setTitle("Number of columns to display")
             .setPositiveButton("CONFIRM", null)
-            .setSingleChoiceItems(singleItems, viewModel.columns.value?: 0 ) { item, which ->
+            .setSingleChoiceItems(singleItems, viewModel.columns.value ?: 0) { item, which ->
                 viewModel.columns.value = which
+
+                // Save column value to shared preferences
+                Utils.saveSharedSettings(requireActivity(), "columns", which.toString())
             }
             .show()
     }
-
-
-
-
-
 
 
     // ViewPager class for the tab fragments
@@ -156,13 +175,13 @@ class HomeFragment : Fragment() {
         FragmentStateAdapter(fragmentActivity) {
 
         private val mFragmentList: MutableList<Fragment> = ArrayList()
-        private val mFragmentTitleList: MutableList<String> = ArrayList()
+//        private val mFragmentTitleList: MutableList<String> = ArrayList()
         private val hashMap: HashMap<Int, Fragment> = HashMap()
 
 
-        fun addFragment(fragment: Fragment, title: String) {
+        fun addFragment(fragment: Fragment) {
             mFragmentList.add(fragment)
-            mFragmentTitleList.add(title)
+//            mFragmentTitleList.add(title)
         }
 
         override fun getItemCount(): Int {

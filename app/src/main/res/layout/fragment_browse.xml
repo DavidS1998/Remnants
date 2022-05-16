@@ -25,22 +25,21 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleTextColor="@color/white"
             tools:title="Seasonal" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs_layout"
+            style="@style/Widget.MaterialComponents.TabLayout.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:translationZ="0.3dp"
+            app:elevation="0.3dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            app:tabGravity="fill"
+            app:tabMode="fixed" />
     </com.google.android.material.appbar.AppBarLayout>
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabs_layout"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:translationZ="0.3dp"
-        app:elevation="0.3dp"
-        app:tabMode="fixed"
-        app:tabGravity="fill"
-        style="@style/Widget.MaterialComponents.TabLayout.Colored"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -6,37 +6,15 @@
         <item name="colorPrimaryVariant">#0b1622</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">#4A148C</item>
-        <item name="colorSecondaryVariant">@color/purple_500</item>
+        <item name="colorSecondary">#C799FF</item>
+        <item name="colorSecondaryVariant">#C799FF</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textColorSecondary">@color/black</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
 
     </style>
 
-    <style name="Theme.Remnants.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.Remnants.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
-
-    </style>
-
-    <style name="Theme.Remnants.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
-
-    </style>
-
-    <style name="DarkToolbarStyle" parent="@android:style/TextAppearance.Widget.IconMenu.Item">
-        <item name="android:colorBackground">@color/black</item>
-        <item name="android:textColorPrimary">@color/black</item>
-        <item name="colorPrimary">@color/black</item>
-        <item name="colorOnPrimary">@color/black</item>
-        <item name="android:actionMenuTextColor">@color/black</item>
-        <item name="android:textColor">@color/black</item>
-        <item name="android:textColorSecondary">@color/black</item>
-    </style>
 </resources>

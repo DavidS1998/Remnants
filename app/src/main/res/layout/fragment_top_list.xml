@@ -23,7 +23,7 @@
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:context="com.falls.remnants.ui.browse.TabSeasonalFragment">
+            tools:context="com.falls.remnants.ui.browse.TabTopFragment">
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/swipeRefreshLayout"
@@ -42,7 +42,7 @@
 
                     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                     app:spanCount="2"
-                    tools:listitem="@layout/item_media_entry_seasonal" />
+                    tools:listitem="@layout/item_media_entry_top" />
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

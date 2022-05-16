@@ -1,59 +1,58 @@
-package com.falls.remnants.ui.home
+package com.falls.remnants.ui.browse
 
 import android.os.Bundle
-import android.view.*
-import android.widget.Toast
-import android.widget.Toolbar
-import androidx.appcompat.app.AppCompatActivity
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.falls.remnants.R
 import com.falls.remnants.databinding.FragmentSeasonalListBinding
-import com.falls.remnants.recycler.SeasonalListAdapter
-import com.falls.remnants.recycler.SeasonalListClickListener
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.falls.remnants.recycler.MediaListAdapter
+import com.falls.remnants.recycler.AdapterClickListener
+import com.falls.remnants.recycler.MediaViewType
 import timber.log.Timber
 
-class TabSeasonalListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class TabSeasonalFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     private var _binding: FragmentSeasonalListBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: TabSeasonalListViewModel by activityViewModels()
-    private lateinit var adapter: SeasonalListAdapter
+    private val viewModel: BrowseViewModel by activityViewModels()
+    private lateinit var adapter: MediaListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSeasonalListBinding.inflate(inflater, container, false)
 
-        // Recycler view
-        adapter = SeasonalListAdapter(SeasonalListClickListener { anime ->
-            viewModel.navigateToDetail(anime)
-        })
-        binding.seasonalListRV.adapter = adapter
+        // Recycler view adapter
+        adapter = MediaListAdapter(
+            AdapterClickListener {
+                val action =
+                    BrowseFragmentDirections.actionNavigationHomeToAnimeDetailsFragment(it)
+                findNavController().navigate(action)
+            }, MediaViewType.SEASONAL
+        )
 
-        viewModel.anime.observe(viewLifecycleOwner) { anime ->
+        binding.recyclerView.adapter = adapter
+
+        viewModel.animeSeasonal.observe(viewLifecycleOwner) { anime ->
             anime?.let {
                 adapter.submitList(anime)
             }
         }
         binding.viewModel = viewModel
 
-        // Navigate to details
-        viewModel.navigateToDetail.observe(viewLifecycleOwner) { anime ->
-            anime?.let {
-                this.findNavController().navigate(
-                    HomeFragmentDirections.actionNavigationHomeToAnimeDetailsFragment(anime)
-                )
-                viewModel.onNavigatedToDetail()
-            }
+        // Set visible column count
+        viewModel.columns.observe(viewLifecycleOwner) { columns ->
+            binding.recyclerView.layoutManager =
+                GridLayoutManager(requireContext(), columns + 1)
+            onRefresh()
         }
 
         // Endless scroller
@@ -68,18 +67,13 @@ class TabSeasonalListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
                 // Load more when the user has reached the latest loaded page
                 if (lastVisibleItem >= totalItemCount - 10) {
                     Timber.d("Reached ${lastVisibleItem}/${totalItemCount}")
-                    viewModel.getMedia()
+                    viewModel.getMedia(MediaViewType.SEASONAL)
                 }
             }
         }
-        binding.seasonalListRV.addOnScrollListener(scrollListener)
+        binding.recyclerView.addOnScrollListener(scrollListener)
 
-        // Set visible column count
-        viewModel.columns.observe(viewLifecycleOwner) { columns ->
-            binding.seasonalListRV.layoutManager =
-                GridLayoutManager(requireContext(), columns + 1)
-            onRefresh()
-        }
+
 
         // Pull to refresh
         binding.swipeRefreshLayout.setOnRefreshListener(this)
@@ -89,7 +83,7 @@ class TabSeasonalListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener
 
     // For pull to refresh
     override fun onRefresh() {
-        viewModel.refreshList()
+        viewModel.refreshList(MediaViewType.SEASONAL)
         binding.swipeRefreshLayout.isRefreshing = false
     }
 }

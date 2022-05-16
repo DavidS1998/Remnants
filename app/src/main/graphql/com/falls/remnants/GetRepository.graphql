@@ -1,5 +1,7 @@
+# LISTS
+
 query SeasonalQuery($season: MediaSeason!, $year: Int!, $pageNumber: Int!) {
-    page: Page(page: $pageNumber, perPage: 50) {
+    page: Page(page: $pageNumber, perPage: 10) {
         pageInfo {
             hasNextPage
         }
@@ -27,11 +29,11 @@ query SeasonalQuery($season: MediaSeason!, $year: Int!, $pageNumber: Int!) {
 }
 
 query TopAllQuery($pageNumber: Int!) {
-    page: Page(page: $pageNumber, perPage: 50) {
+    page: Page(page: $pageNumber, perPage: 10) {
         pageInfo {
             hasNextPage
         }
-        media(sort: SCORE_DESC, isAdult: false)  {
+        media(sort: SCORE_DESC, isAdult: false, type: ANIME)  {
             id
             title {
                 romaji
@@ -51,6 +53,31 @@ query TopAllQuery($pageNumber: Int!) {
         }
     }
 }
+
+query UpcomingQuery($pageNumber: Int!) {
+    page: Page(page: $pageNumber, perPage: 10) {
+        pageInfo {
+            hasNextPage
+        }
+        media(sort: POPULARITY_DESC, isAdult: false, type: ANIME, status: NOT_YET_RELEASED, season: null, seasonYear: null) {
+            id
+            popularity
+            title {
+                romaji
+                english
+            }
+            format
+            coverImage {
+                extraLarge
+                large
+                medium
+                color
+            }
+        }
+    }
+}
+
+# DETAILS
 
 query DetailsQuery($id: Int!) {
     anime: Media(id: $id) {
@@ -81,5 +108,33 @@ query DetailsQuery($id: Int!) {
             day
         }
         status
+    }
+}
+
+query UserAiringQuery($pageNumber: Int!) {
+    page: Page(page: $pageNumber, perPage: 50) {
+        pageInfo {
+            hasNextPage
+        }
+        media(sort: POPULARITY_DESC, isAdult: false, type: ANIME, onList: true) {
+            id
+            title {
+                romaji
+                english
+            }
+            format
+            coverImage {
+                extraLarge
+                large
+                medium
+                color
+            }
+            nextAiringEpisode {
+                episode
+                timeUntilAiring
+            }
+            episodes
+            status
+        }
     }
 }

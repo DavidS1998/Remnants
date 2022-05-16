@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.falls.remnants.ui.home.HomeFragment"
+        android:name="com.falls.remnants.ui.browse.BrowseFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_browse" >
         <action
             android:id="@+id/action_navigation_home_to_animeDetailsFragment"
             app:destination="@id/animeDetailsFragment" />
@@ -17,15 +17,15 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.falls.remnants.ui.dashboard.DashboardFragment"
+        android:name="com.falls.remnants.ui.library.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_library" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.falls.remnants.ui.notifications.NotificationsFragment"
+        android:name="com.falls.remnants.ui.tools.NotificationsFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_tools" />
     <fragment
         android:id="@+id/animeDetailsFragment"
         android:name="com.falls.remnants.ui.details.AnimeDetailsFragment"
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/tabSeasonalListFragment"
-        android:name="com.falls.remnants.ui.home.TabSeasonalListFragment"
+        android:name="com.falls.remnants.ui.browse.TabSeasonalFragment"
         android:label="TabSeasonalListFragment" >
         <action
             android:id="@+id/action_tabSeasonalListFragment_to_animeDetailsFragment"

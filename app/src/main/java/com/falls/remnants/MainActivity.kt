@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Enable Timer
+        // Enable Timber
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
@@ -36,9 +36,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
             )
         )
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-//        setSupportActionBar(binding.toolbarDefault.toolbar)
-//        binding.toolbarDefault.toolbar.elevation = 0f
         navView.setupWithNavController(navController)
     }
 

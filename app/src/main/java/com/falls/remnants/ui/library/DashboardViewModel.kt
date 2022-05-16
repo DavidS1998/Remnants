@@ -1,4 +1,4 @@
-package com.falls.remnants.ui.dashboard
+package com.falls.remnants.ui.library
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
