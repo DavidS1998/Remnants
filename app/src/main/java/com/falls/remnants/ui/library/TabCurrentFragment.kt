@@ -1,4 +1,4 @@
-package com.falls.remnants.ui.browse
+package com.falls.remnants.ui.library
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,37 +11,37 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.falls.remnants.adapter.MediaListAdapter
 import com.falls.remnants.adapter.AdapterClickListener
+import com.falls.remnants.adapter.MediaListAdapter
 import com.falls.remnants.adapter.MediaViewType
-import com.falls.remnants.databinding.FragmentBrowseSeasonalListBinding
+import com.falls.remnants.databinding.FragmentLibraryCurrentListBinding
 import timber.log.Timber
 
-class TabSeasonalFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class TabCurrentFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
-    private var _binding: FragmentBrowseSeasonalListBinding? = null
+    private var _binding: FragmentLibraryCurrentListBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: BrowseViewModel by activityViewModels()
+    private val viewModel: LibraryViewModel by activityViewModels()
     private lateinit var adapter: MediaListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentBrowseSeasonalListBinding.inflate(inflater, container, false)
+        _binding = FragmentLibraryCurrentListBinding.inflate(inflater, container, false)
 
         // Recycler view adapter
         adapter = MediaListAdapter(
             AdapterClickListener {
                 val action =
-                    BrowseFragmentDirections.actionNavigationHomeToAnimeDetailsFragment(it)
+                    LibraryFragmentDirections.actionNavigationDashboardToAnimeDetailsFragment(it)
                 findNavController().navigate(action)
             }, MediaViewType.SEASONAL
         )
 
         binding.recyclerView.adapter = adapter
 
-        viewModel.animeSeasonal.observe(viewLifecycleOwner) { anime ->
+        viewModel.animeCurrent.observe(viewLifecycleOwner) { anime ->
             anime?.let {
                 adapter.submitList(anime)
             }

@@ -18,4 +18,5 @@ data class Anime(
     val description: String = "",
     val score: String = "",
     val popularity: String = "",
+    val status: String = "",
 ) : Parcelable

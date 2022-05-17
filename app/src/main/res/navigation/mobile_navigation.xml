@@ -17,9 +17,13 @@
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="com.falls.remnants.ui.library.DashboardFragment"
+        android:name="com.falls.remnants.ui.library.LibraryFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_library" />
+        tools:layout="@layout/fragment_library" >
+        <action
+            android:id="@+id/action_navigation_dashboard_to_animeDetailsFragment"
+            app:destination="@id/animeDetailsFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -33,15 +37,5 @@
         <argument
             android:name="Anime"
             app:argType="com.falls.remnants.data.Anime" />
-    </fragment>
-    <fragment
-        android:id="@+id/tabSeasonalListFragment"
-        android:name="com.falls.remnants.ui.browse.TabSeasonalFragment"
-        android:label="TabSeasonalListFragment" >
-        <action
-            android:id="@+id/action_tabSeasonalListFragment_to_animeDetailsFragment"
-            app:destination="@id/animeDetailsFragment"
-            app:enterAnim="@android:anim/slide_in_left"
-            app:exitAnim="@android:anim/slide_out_right" />
     </fragment>
 </navigation>

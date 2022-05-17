@@ -1,13 +1,11 @@
 package com.falls.remnants.data
 
 object Configs {
-    val client_id = 8347
     const val perPage: Int = 20 // TODO: Make adjustable
 
-//    var columns =
-//
-//    // Apply settings
-//    val value = Utils.getSharedSettings(requireActivity(), "columns")
-//    viewModel.columns.value = value.toIntOrNull() ?: 1
-//
+    val client_id = 8347
+    var loggedIn = false
+    var tempLoggedIn = true
+    var key = ""
+    const val tempKey = "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjQ4YTQwZGEwMDg3ZmY4YmZlY2I3YWI5ZmQ4Yjg4NTU0ZDUzNjRlOTdkNDFjZGQ1MTc2ZDU5NDg1YzNlZWEyNDU4M2I3MjAyMjY2NTZhNTI1In0.eyJhdWQiOiI4MzQ3IiwianRpIjoiNDhhNDBkYTAwODdmZjhiZmVjYjdhYjlmZDhiODg1NTRkNTM2NGU5N2Q0MWNkZDUxNzZkNTk0ODVjM2VlYTI0NTgzYjcyMDIyNjY1NmE1MjUiLCJpYXQiOjE2NTI3MTA4MDYsIm5iZiI6MTY1MjcxMDgwNiwiZXhwIjoxNjg0MjQ2ODA2LCJzdWIiOiIxMDEwIiwic2NvcGVzIjpbXX0.nH-MKXbzMghj10nQYOu6uU6rsdNpvWj4g1T2jGFpx8k9vX5PiFgnSkKiprxdMuj9izM0fcF3lYvzTweoV1Sj-jqrnh_t6XUvMJtSAHgJi-I3GNIDRdmnTxUG9vkzqywi1-sxYPEfiLnSQeBbDWQUOtfm51RdGRjqIoJCpN2CeIvm36rn7ANomtWgDCAk7nLj6IoyLGd4lmaluXgN08LDlY-IOkZcQ0eh5ZcAaHBez3g2nEhlUYh8eCI-Na6nkkIyHU9nmpUyNfW1UOfRqbbLDnGowBQDULaWDBLKLL8b6NI_uCZwV6xBE7x7Zm7xxfWNUUMPP6veh6TVB7EOhXhtN1AoeCLicEwpft8hQnCXjw1HztXP3OL8FQkC2P3t6Md5nA0a78BN8SW0aewHPlFI32A2-Ztrd3jB-AizYh282OAxdFL4PRthtBlI2TGoh7iBRrLtRvTlC3mjv5ecsv0F1N7xrLaiowW-I7uQDIxpx5VirNqKS5YFa6eQyf7W1_2lm2Bfd2yYN8-1jpFCJxi4WNqCgN6zncBMzZhI6YTsNzSJj1KXnTrLcFFHBIpvAwKYt5t2h54cuK6BWvQgcXcNFGSGvSrj8yyQ8dGfS2WaBdK9IcBTtepja1MzpvDN-cWzy84sRsSwGm2ii9l5XFIY9AGuLNlUEVnVHWO2Q78easE"
 }

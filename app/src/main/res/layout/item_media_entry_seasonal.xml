@@ -10,7 +10,7 @@
 
         <variable
             name="clickListener"
-            type="com.falls.remnants.recycler.AdapterClickListener"/>
+            type="com.falls.remnants.adapter.AdapterClickListener"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

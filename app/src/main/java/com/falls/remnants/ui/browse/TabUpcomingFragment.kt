@@ -11,15 +11,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.falls.remnants.databinding.FragmentUpcomingListBinding
-import com.falls.remnants.recycler.AdapterClickListener
-import com.falls.remnants.recycler.MediaListAdapter
-import com.falls.remnants.recycler.MediaViewType
+import com.falls.remnants.adapter.AdapterClickListener
+import com.falls.remnants.adapter.MediaListAdapter
+import com.falls.remnants.adapter.MediaViewType
+import com.falls.remnants.databinding.FragmentBrowseUpcomingListBinding
 import timber.log.Timber
 
 class TabUpcomingFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
-    private var _binding: FragmentUpcomingListBinding? = null
+    private var _binding: FragmentBrowseUpcomingListBinding? = null
     private val binding get() = _binding!!
     private val viewModel: BrowseViewModel by activityViewModels()
     private lateinit var adapter: MediaListAdapter
@@ -28,7 +28,7 @@ class TabUpcomingFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentUpcomingListBinding.inflate(inflater, container, false)
+        _binding = FragmentBrowseUpcomingListBinding.inflate(inflater, container, false)
 
         // Recycler view adapter
         adapter = MediaListAdapter(

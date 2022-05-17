@@ -1,4 +1,4 @@
-package com.falls.remnants.recycler
+package com.falls.remnants.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import com.apollographql.apollo3.exception.ApolloException
 import com.falls.remnants.data.AnilistQueries
 import com.falls.remnants.data.Anime
-import com.falls.remnants.recycler.MediaViewType
+import com.falls.remnants.adapter.MediaViewType
 import com.falls.remnants.type.MediaSeason
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -59,6 +59,7 @@ class BrowseViewModel : ViewModel() {
             // Don't run if no more pages exist
             if (!_seasonalHasNextPage) return@launch
             _seasonalPagesLoaded++
+            val currentSeason = _setSeason
 
             try {
                 val (titles, nextPageExists) = AnilistQueries.seasonal(
@@ -66,6 +67,9 @@ class BrowseViewModel : ViewModel() {
                     _year,
                     _seasonalPagesLoaded
                 )
+
+                // View has changed, throw away the old result
+                if (currentSeason != _setSeason) return@launch
 
                 // Append data to any pre-existing data
                 _animeSeasonal.value = _animeSeasonal.value?.plus(titles) ?: titles

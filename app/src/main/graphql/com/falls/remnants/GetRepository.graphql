@@ -116,25 +116,28 @@ query UserAiringQuery($pageNumber: Int!) {
         pageInfo {
             hasNextPage
         }
-        media(sort: POPULARITY_DESC, isAdult: false, type: ANIME, onList: true) {
-            id
-            title {
-                romaji
-                english
+
+        mediaList(userName: "Falls", status: CURRENT, sort: MEDIA_POPULARITY_DESC, type: ANIME) {
+            media {
+                id
+                title {
+                    romaji
+                    english
+                }
+                format
+                coverImage {
+                    extraLarge
+                    large
+                    medium
+                    color
+                }
+                nextAiringEpisode {
+                    episode
+                    timeUntilAiring
+                }
+                episodes
+                status
             }
-            format
-            coverImage {
-                extraLarge
-                large
-                medium
-                color
-            }
-            nextAiringEpisode {
-                episode
-                timeUntilAiring
-            }
-            episodes
-            status
         }
     }
 }

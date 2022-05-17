@@ -5,6 +5,7 @@ import com.apollographql.apollo3.exception.ApolloException
 import com.falls.remnants.SeasonalQuery
 import com.falls.remnants.TopAllQuery
 import com.falls.remnants.UpcomingQuery
+import com.falls.remnants.UserAiringQuery
 import com.falls.remnants.networking.GraphQLapi
 import com.falls.remnants.type.MediaSeason
 import timber.log.Timber
@@ -20,7 +21,7 @@ object AnilistQueries {
         Timber.d("QUERY SENT, PAGE: $page")
 
         // Formatting
-        val titles = response.data?.page?.media?.map {
+        val titles = response.data?.page?.media?.mapNotNull {
             Anime(
 
                 id = it?.id!!,
@@ -54,7 +55,7 @@ object AnilistQueries {
         Timber.d("QUERY SENT, PAGE: $page")
 
         // Formatting
-        val titles = response.data?.page?.media?.map {
+        val titles = response.data?.page?.media?.mapNotNull {
             Anime(
 
                 id = it?.id!!,
@@ -85,7 +86,7 @@ object AnilistQueries {
         Timber.d("QUERY SENT, PAGE: $page")
 
         // Formatting
-        val titles = response.data?.page?.media?.map {
+        val titles = response.data?.page?.media?.mapNotNull {
             Anime(
 
                 id = it?.id!!,
@@ -103,6 +104,46 @@ object AnilistQueries {
                 },
             )
         } ?: listOf()
+
+        return Pair(titles, response.data?.page?.pageInfo?.hasNextPage == true)
+    }
+
+
+    suspend fun current(page: Int) : Pair<List<Anime>, Boolean> {
+        // Execute and post query
+        val response: ApolloResponse<UserAiringQuery.Data> = GraphQLapi.getInstance()
+            .query(UserAiringQuery(page))
+            .execute()
+
+        Timber.d("QUERY SENT, PAGE: $page")
+
+        // Formatting
+        var titles = response.data?.page?.mediaList?.mapNotNull { it?.media }?.map {
+            Anime(
+                id = it.id,
+                engTitle = it.title?.english ?: it.title?.romaji ?: "",
+                japTitle =  if (it.title?.romaji.equals(it.title?.english ?: it.title?.romaji)) "" // If same, empty
+                else it.title?.romaji?: "",
+                episodes = "/" + (it.episodes?: "?"),
+                status = it.status?.toString() ?: "?",
+                nextEpisode = Utils.formatDate(
+                    it.nextAiringEpisode?.timeUntilAiring?: -1,
+                    it.nextAiringEpisode?.episode?: -1,
+                    it.episodes?: -1,
+                    it.status?.name?: ""),
+                coverPath = it.coverImage?.extraLarge?: it.coverImage?.large?: it.coverImage?.medium?: "", // XL > L > M > None
+                format = when {
+                    it.format.toString() == "TV_SHORT" -> "SHORT"
+                    it.format.toString() == "null" -> "?"
+                    else -> it.format.toString()
+                },
+            )
+        } ?: listOf()
+
+        // Filter non-releasing anime
+        titles = titles.filter { it.status == "RELEASING" }
+
+
 
         return Pair(titles, response.data?.page?.pageInfo?.hasNextPage == true)
     }
