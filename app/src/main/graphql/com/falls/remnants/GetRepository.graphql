@@ -67,13 +67,13 @@ query DetailsQuery($id: Int!) {
 }
 
 # USER LIST
-query UserAiringQuery($pageNumber: Int!, $list: MediaListStatus, $sort: [MediaListSort]) {
+query UserAiringQuery($pageNumber: Int!, $user: String!, $list: MediaListStatus, $sort: [MediaListSort]) {
     page: Page(page: $pageNumber, perPage: 50) {
         pageInfo {
             hasNextPage
         }
 
-        mediaList(userName: "Falls", status: $list, sort: $sort, type: ANIME) {
+        mediaList(userName: $user, status: $list, sort: $sort, type: ANIME) {
             score(format: POINT_100)
             media {
                 id
@@ -96,5 +96,12 @@ query UserAiringQuery($pageNumber: Int!, $list: MediaListStatus, $sort: [MediaLi
                 status
             }
         }
+    }
+}
+
+query UserInfoQuery {
+    user: Viewer {
+        id
+        name
     }
 }

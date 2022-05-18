@@ -6,8 +6,11 @@ object Configs {
     const val perPage: Int = 20 // TODO: Make adjustable
     var columns = MutableLiveData(1)
 
-    val client_id = 8347
-    var loggedIn = false
-    var tempLoggedIn = true
-    var key = ""
+    const val client_id = 8347
+
+    var loggedIn = MutableLiveData(false)
+    var username = MutableLiveData("")
+
+    var token = ""
+
 }

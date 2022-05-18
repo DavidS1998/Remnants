@@ -84,13 +84,50 @@ object AnilistQueries {
 
     //////////////////////////////////////////////////////////////
 
+    // Details
+    suspend fun details(id: Int): Anime {
+        // Execute and post query
+        val response: ApolloResponse<DetailsQuery.Data> = GraphQLapi.getInstance()
+            .query(DetailsQuery(id))
+            .execute()
+
+        Timber.d("DETAILS QUERY SENT")
+
+        // Formatting
+        val data = response.data?.anime
+
+        return Anime(
+            id = data?.id!!,
+            engTitle = data.title?.english ?: data.title?.romaji ?: "",
+            japTitle = if (data.title?.romaji.equals(
+                    data.title?.english ?: data.title?.romaji
+                )
+            ) "" // If same, empty
+            else data.title?.romaji ?: "",
+
+            description = data.description ?: "",
+            score = if ((data.averageScore).toString() == "null") "N/A" else data.averageScore.toString(),
+
+            bannerPath = data.bannerImage ?: "",
+            coverPath = data.coverImage?.extraLarge ?: data.coverImage?.large
+            ?: data.coverImage?.medium ?: "",
+        )
+    }
+
     // User list query with unique formatting
     suspend fun library(page: Int, viewList: MediaListStatus = MediaListStatus.CURRENT, order: MediaListSort = MediaListSort.MEDIA_POPULARITY_DESC) : Pair<List<Anime>, Boolean> {
+
+        // Return if not logged in
+        if (Configs.loggedIn.value == false) {
+            return Pair(listOf(), false)
+        }
+
         // Execute and post query
-        val response: ApolloResponse<UserAiringQuery.Data> = GraphQLapi.getInstance()
+        val response: ApolloResponse<UserAiringQuery.Data> = GraphQLapi.getLoggedInInstance(Configs.token)
             .query(UserAiringQuery(
                 pageNumber = page,
                 list = viewList,
+                user = Configs.username.value.toString(),
                 sort = listOf(order)))
             .execute()
 
@@ -127,35 +164,5 @@ object AnilistQueries {
         } ?: listOf()
 
         return Pair(titles, response.data?.page?.pageInfo?.hasNextPage == true)
-    }
-
-    // Details
-    suspend fun details(id: Int): Anime {
-        // Execute and post query
-        val response: ApolloResponse<DetailsQuery.Data> = GraphQLapi.getInstance()
-            .query(DetailsQuery(id))
-            .execute()
-
-        Timber.d("DETAILS QUERY SENT")
-
-        // Formatting
-        val data = response.data?.anime
-
-        return Anime(
-            id = data?.id!!,
-            engTitle = data.title?.english ?: data.title?.romaji ?: "",
-            japTitle = if (data.title?.romaji.equals(
-                    data.title?.english ?: data.title?.romaji
-                )
-            ) "" // If same, empty
-            else data.title?.romaji ?: "",
-
-            description = data.description ?: "",
-            score = if ((data.averageScore).toString() == "null") "N/A" else data.averageScore.toString(),
-
-            bannerPath = data.bannerImage ?: "",
-            coverPath = data.coverImage?.extraLarge ?: data.coverImage?.large
-            ?: data.coverImage?.medium ?: "",
-        )
     }
 }

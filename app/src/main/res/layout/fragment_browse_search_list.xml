@@ -25,6 +25,17 @@
             android:layout_height="match_parent"
             tools:context="com.falls.remnants.ui.browse.TabSearchFragment">
 
+            <TextView
+                android:id="@+id/search_indicator"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:text="Perform search from the toolbar"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:translationZ="30dp"
+                app:elevation="30dp" />
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
                 android:id="@+id/swipeRefreshLayout"

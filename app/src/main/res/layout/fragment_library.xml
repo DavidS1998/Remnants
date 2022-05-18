@@ -46,6 +46,18 @@
             app:tabMode="fixed" />
     </com.google.android.material.appbar.AppBarLayout>
 
+    <TextView
+        android:id="@+id/logged_in_indicator"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:text="Not logged in"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:translationZ="30dp"
+        app:elevation="30dp" />
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"
         android:layout_width="match_parent"

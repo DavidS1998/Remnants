@@ -91,7 +91,12 @@ class LibraryFragment : Fragment() {
                 viewModel.getMedia(MediaViewType.SEARCH)
             }
 
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 // Update the view model
                 if (viewModel._currentList == position) {
                     return
@@ -102,7 +107,22 @@ class LibraryFragment : Fragment() {
             }
         }
 
+        // Observe logged in status
+        Configs.loggedIn.observe(viewLifecycleOwner) {
+            checkLoggedIn()
+        }
+
         return binding.root
+    }
+
+    private fun checkLoggedIn() {
+        if (Configs.loggedIn.value == false) {
+            viewModel.refreshList(MediaViewType.SEARCH)
+            viewModel.refreshList(MediaViewType.SEASONAL)
+            binding.loggedInIndicator.visibility = View.VISIBLE
+        } else {
+            binding.loggedInIndicator.visibility = View.GONE
+        }
     }
 
 

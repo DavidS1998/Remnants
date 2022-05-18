@@ -44,9 +44,15 @@ object Utils {
 
     // Save data to SharedSettings
     fun saveSharedSettings(activity: Activity, key: String, value: String) {
+
         val sharedPref = activity.getSharedPreferences("settings", 0)
         val editor = sharedPref.edit()
-        editor.putString(key, value)
+
+        if (value == "") {
+            editor.remove(key)
+        } else {
+            editor.putString(key, value)
+        }
         editor.apply()
     }
 }

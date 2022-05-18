@@ -54,6 +54,16 @@ public class TabSearchFragment : Fragment(), SwipeRefreshLayout.OnRefreshListene
                 GridLayoutManager(requireContext(), columns + 1)
         }
 
+        // Observe logged in status
+        viewModel.animeSearch.observe(viewLifecycleOwner) {
+            if (it.isEmpty()) {
+                binding.searchIndicator.visibility = View.VISIBLE
+            } else {
+                binding.searchIndicator.visibility = View.GONE
+            }
+        }
+
+
         // Pull to refresh
         binding.swipeRefreshLayout.setOnRefreshListener(this)
 
