@@ -63,8 +63,8 @@
             tools:layout_width="210dp"
             android:layout_height="34dp"
 
-            text="@{anime.score + ` / 100`}"
-            tools:text="74 / 100"
+            text="@{anime.score + `%`}"
+            tools:text="74%"
             android:background="#99000000"
             android:textColor="#FFFFFF"
             android:padding="8dp"

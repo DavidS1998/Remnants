@@ -7,14 +7,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.falls.remnants.data.Anime
 import com.falls.remnants.databinding.ItemMediaEntrySeasonalBinding
-import com.falls.remnants.databinding.ItemMediaEntryTopBinding
+import com.falls.remnants.databinding.ItemMediaEntrySearchBinding
 import com.falls.remnants.databinding.ItemMediaEntryUpcomingBinding
 import timber.log.Timber
 
 // Ways to display media
 enum class MediaViewType {
     SEASONAL,
-    TOP,
+    SEARCH,
     UPCOMING
 }
 
@@ -49,7 +49,7 @@ class MediaListAdapter(private val clickListener: AdapterClickListener, viewType
             )
         } else {
              return ViewHolder(
-                 ItemMediaEntryTopBinding.inflate(
+                 ItemMediaEntrySearchBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
@@ -63,8 +63,8 @@ class MediaListAdapter(private val clickListener: AdapterClickListener, viewType
 
         fun bind(item: Anime, clickListener: AdapterClickListener) {
             when (viewType) {
-                MediaViewType.TOP -> {
-                    (binding as ItemMediaEntryTopBinding).anime = item
+                MediaViewType.SEARCH -> {
+                    (binding as ItemMediaEntrySearchBinding).anime = item
                     binding.clickListener = clickListener
                 }
                 MediaViewType.SEASONAL -> {

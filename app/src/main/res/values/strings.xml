@@ -7,4 +7,13 @@
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="media_cover_image">Media cover image</string>
+
+    <string-array name="MediaLists">
+        <item>CURRENT</item>
+        <item>COMPLETED</item>
+        <item>PAUSED</item>
+        <item>DROPPED</item>
+        <item>REPEATING</item>
+        <item>PLANNING</item>
+    </string-array>
 </resources>

@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.falls.remnants.data.Configs
+import com.falls.remnants.data.Utils
 import com.falls.remnants.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import timber.log.Timber
@@ -37,6 +39,10 @@ class MainActivity : AppCompatActivity() {
             )
         )
         navView.setupWithNavController(navController)
+
+        // Apply saved settings
+        val value = Utils.getSharedSettings(this, "columns")
+        Configs.columns.value = value.toIntOrNull() ?: 1
     }
 
     override fun onSupportNavigateUp(): Boolean {

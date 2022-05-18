@@ -1,16 +1,18 @@
 package com.falls.remnants.ui.browse
 
-import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.inputmethod.InputMethodManager
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.falls.remnants.R
 import com.falls.remnants.adapter.AdapterTabPager
+import com.falls.remnants.data.Configs
 import com.falls.remnants.data.Utils
 import com.falls.remnants.databinding.FragmentBrowseBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -29,14 +31,6 @@ class BrowseFragment : Fragment() {
     private lateinit var pageAdapter: AdapterTabPager
     private val viewModel: BrowseViewModel by activityViewModels()
 
-    override fun onAttach(activity: Activity) {
-        // Apply settings
-        val value = Utils.getSharedSettings(requireActivity(), "columns")
-        viewModel.columns.value = value.toIntOrNull() ?: 1
-
-        super.onAttach(activity)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,10 +38,6 @@ class BrowseFragment : Fragment() {
     ): View {
 
         _binding = FragmentBrowseBinding.inflate(inflater, container, false)
-
-        // Retrieve settings from shared preferences
-//        val value = Utils.getSharedSettings(requireActivity(), "columns")
-//        viewModel.columns.value = value.toIntOrNull() ?: 1
 
         // Create viewpager
         pageAdapter = AdapterTabPager(activity as FragmentActivity)
@@ -66,13 +56,10 @@ class BrowseFragment : Fragment() {
             }
         )
 
-//      Initialize and add tab fragments
-        val tab1 = TabSeasonalFragment()
-        pageAdapter.addFragment(tab1)
-        val tab2 = TabUpcomingFragment()
-        pageAdapter.addFragment(tab2)
-        val tab3 = TabTopFragment()
-        pageAdapter.addFragment(tab3)
+        // Initialize and add tab fragments
+        pageAdapter.addFragment(TabSeasonalFragment())
+        pageAdapter.addFragment(TabUpcomingFragment())
+        pageAdapter.addFragment(TabSearchFragment())
 
         // TabLayout
         val tabs = binding.tabsLayout
@@ -81,7 +68,7 @@ class BrowseFragment : Fragment() {
                 // TODO: Programmatically set the tab text from page adapter
                 0 -> "Seasonal"
                 1 -> "Upcoming"
-                2 -> "Top rated"
+                2 -> "Search"
                 else -> "What"
             }
         }.attach()
@@ -89,14 +76,18 @@ class BrowseFragment : Fragment() {
         return binding.root
     }
 
-
+    // Set unique toolbars for each tab
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         when (viewPager.currentItem) {
-            0 -> inflater.inflate(R.menu.action_seasonal, menu)
-            1 -> inflater.inflate(R.menu.action_generic_list, menu)
-            2 -> inflater.inflate(R.menu.action_generic_list, menu)
+            0 -> {
+                inflater.inflate(R.menu.action_seasonal, menu)
+                inflateSearch(menu)
+            }
+            1, 2 -> {
+                inflater.inflate(R.menu.action_generic_list, menu)
+                inflateSearch(menu)
+            }
         }
-
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -121,13 +112,17 @@ class BrowseFragment : Fragment() {
             R.id.span_size -> {
                 sliderDialog(); true
             }
+            R.id.search -> {
+                item.expandActionView()
+
+                // Show keyboard
+                (item.actionView as SearchView).requestFocus()
+                val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(item.actionView, InputMethodManager.SHOW_IMPLICIT)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    override fun onResume() {
-        setToolbar()
-        super.onResume()
     }
 
     fun setToolbar() {
@@ -144,25 +139,69 @@ class BrowseFragment : Fragment() {
             }
             2 -> {
                 (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-                binding.toolbar.title = "TOP RATED"
+                binding.toolbar.title = viewModel.lastQuery
                 setHasOptionsMenu(true)
             }
         }
+    }
+
+    private fun inflateSearch(menu: Menu) {
+        val menuItem = menu.findItem(R.id.search)
+
+        val searchView = menuItem.actionView as SearchView
+        searchView.isIconifiedByDefault = false
+        searchView.queryHint = "Search AniList"
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    // Scroll to Search tab
+                    viewPager.setCurrentItem(2, true)
+
+                    // Execute search
+                    viewModel.tempSearch(query)
+
+                    // Set title
+                    viewModel.lastQuery = "\"" + query.uppercase() + "\""
+                    binding.toolbar.title = "\"" + query.uppercase() + "\""
+
+                    // Hide keyboard
+                    val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(searchView.windowToken, 0)
+                }
+                return true
+            }
+
+            override fun onQueryTextChange(query: String?): Boolean {
+                // Procedural search (disabled for network performance, rate limiting)
+//                if (query != null) {
+//                    viewModel.tempSearch(query)
+//                    viewPager.setCurrentItem(2, true)
+//                    return true
+//                }
+                return false
+            }
+        })
+    }
+
+    override fun onResume() {
+        setToolbar()
+        super.onResume()
     }
 
     // TODO: Set default based on resolution
     // Select view mode
     private fun sliderDialog() {
         val singleItems = arrayOf("1", "2", "3", "4", "5", "6", "7", "8")
-//
+
         MaterialAlertDialogBuilder(
             requireContext(),
             com.google.android.material.R.style.Base_ThemeOverlay_AppCompat_Dialog
         )
             .setTitle("Number of columns to display")
             .setPositiveButton("CONFIRM", null)
-            .setSingleChoiceItems(singleItems, viewModel.columns.value ?: 0) { item, which ->
-                viewModel.columns.value = which
+            .setSingleChoiceItems(singleItems, Configs.columns.value ?: 0) { item, which ->
+//                viewModel.columns.value = which
+                Configs.columns.value = which
 
                 // Save column value to shared preferences
                 Utils.saveSharedSettings(requireActivity(), "columns", which.toString())

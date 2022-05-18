@@ -6,4 +6,10 @@
         android:id="@+id/span_size"
         android:title="Columns"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/search"
+        android:title="Search"
+        android:icon="@drawable/ic_baseline_search_24"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.widget.SearchView"/>
 </menu>

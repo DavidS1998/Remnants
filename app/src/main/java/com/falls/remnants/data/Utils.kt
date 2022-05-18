@@ -27,8 +27,8 @@ object Utils {
 
         var remaining: String
         remaining = " in $minutes min"
-        if (hours > 1) remaining = " in $hours hours"
-        if (days > 1) remaining = " in $days days"
+        if (hours >= 1) remaining = " in $hours hours"
+        if (days >= 1) remaining = " in $days days"
 
         // Both airing date and episode counter are returned
         // Ep. 5/12 in 3 days

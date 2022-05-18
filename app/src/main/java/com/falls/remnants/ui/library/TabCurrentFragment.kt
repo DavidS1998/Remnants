@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.falls.remnants.adapter.AdapterClickListener
 import com.falls.remnants.adapter.MediaListAdapter
 import com.falls.remnants.adapter.MediaViewType
+import com.falls.remnants.data.Configs
 import com.falls.remnants.databinding.FragmentLibraryCurrentListBinding
 import timber.log.Timber
 
@@ -44,36 +45,17 @@ class TabCurrentFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         viewModel.animeCurrent.observe(viewLifecycleOwner) { anime ->
             anime?.let {
                 adapter.submitList(anime)
+                binding.recyclerView.scrollToPosition(0)
             }
         }
         binding.viewModel = viewModel
 
         // Set visible column count
-        viewModel.columns.observe(viewLifecycleOwner) { columns ->
+        Configs.columns.observe(viewLifecycleOwner) { columns ->
             binding.recyclerView.layoutManager =
                 GridLayoutManager(requireContext(), columns + 1)
             onRefresh()
         }
-
-        // Endless scroller
-        val scrollListener = object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-
-                val totalItemCount = recyclerView.layoutManager!!.itemCount
-                val lastVisibleItem =
-                    (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
-
-                // Load more when the user has reached the latest loaded page
-                if (lastVisibleItem >= totalItemCount - 10) {
-                    Timber.d("Reached ${lastVisibleItem}/${totalItemCount}")
-                    viewModel.getMedia(MediaViewType.SEASONAL)
-                }
-            }
-        }
-        binding.recyclerView.addOnScrollListener(scrollListener)
-
-
 
         // Pull to refresh
         binding.swipeRefreshLayout.setOnRefreshListener(this)

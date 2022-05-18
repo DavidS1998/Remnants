@@ -14,6 +14,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.falls.remnants.adapter.MediaListAdapter
 import com.falls.remnants.adapter.AdapterClickListener
 import com.falls.remnants.adapter.MediaViewType
+import com.falls.remnants.data.Configs
 import com.falls.remnants.databinding.FragmentBrowseSeasonalListBinding
 import timber.log.Timber
 
@@ -49,7 +50,7 @@ class TabSeasonalFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         binding.viewModel = viewModel
 
         // Set visible column count
-        viewModel.columns.observe(viewLifecycleOwner) { columns ->
+        Configs.columns.observe(viewLifecycleOwner) { columns ->
             binding.recyclerView.layoutManager =
                 GridLayoutManager(requireContext(), columns + 1)
             onRefresh()
@@ -65,15 +66,13 @@ class TabSeasonalFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
 
                 // Load more when the user has reached the latest loaded page
-                if (lastVisibleItem >= totalItemCount - 10) {
+                if (lastVisibleItem >= totalItemCount - 2) {
                     Timber.d("Reached ${lastVisibleItem}/${totalItemCount}")
                     viewModel.getMedia(MediaViewType.SEASONAL)
                 }
             }
         }
         binding.recyclerView.addOnScrollListener(scrollListener)
-
-
 
         // Pull to refresh
         binding.swipeRefreshLayout.setOnRefreshListener(this)

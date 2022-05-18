@@ -21,10 +21,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleTextColor="@color/white"
-            tools:title="Current" />
+            tools:title="Title" >
+        </androidx.appcompat.widget.Toolbar>
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_marginTop="-56dp"
+            android:layout_marginStart="8dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs_layout"
             style="@style/Widget.MaterialComponents.TabLayout.Colored"

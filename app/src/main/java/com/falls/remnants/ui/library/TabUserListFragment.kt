@@ -1,4 +1,4 @@
-package com.falls.remnants.ui.browse
+package com.falls.remnants.ui.library
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,34 +15,34 @@ import com.falls.remnants.adapter.AdapterClickListener
 import com.falls.remnants.adapter.MediaListAdapter
 import com.falls.remnants.adapter.MediaViewType
 import com.falls.remnants.data.Configs
-import com.falls.remnants.databinding.FragmentBrowseUpcomingListBinding
+import com.falls.remnants.databinding.FragmentLibraryCurrentListBinding
 import timber.log.Timber
 
-class TabUpcomingFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
+class TabUserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
-    private var _binding: FragmentBrowseUpcomingListBinding? = null
+    private var _binding: FragmentLibraryCurrentListBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: BrowseViewModel by activityViewModels()
+    private val viewModel: LibraryViewModel by activityViewModels()
     private lateinit var adapter: MediaListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentBrowseUpcomingListBinding.inflate(inflater, container, false)
+        _binding = FragmentLibraryCurrentListBinding.inflate(inflater, container, false)
 
         // Recycler view adapter
         adapter = MediaListAdapter(
             AdapterClickListener {
                 val action =
-                    BrowseFragmentDirections.actionNavigationHomeToAnimeDetailsFragment(it)
+                    LibraryFragmentDirections.actionNavigationDashboardToAnimeDetailsFragment(it)
                 findNavController().navigate(action)
-            }, MediaViewType.UPCOMING
+            }, MediaViewType.SEARCH
         )
 
         binding.recyclerView.adapter = adapter
 
-        viewModel.animeUpcoming.observe(viewLifecycleOwner) { anime ->
+        viewModel.animeLibrary.observe(viewLifecycleOwner) { anime ->
             anime?.let {
                 adapter.submitList(anime)
             }
@@ -66,15 +66,13 @@ class TabUpcomingFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                     (recyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
 
                 // Load more when the user has reached the latest loaded page
-                if (lastVisibleItem >= totalItemCount - 10) {
+                if (lastVisibleItem >= totalItemCount - 2) {
                     Timber.d("Reached ${lastVisibleItem}/${totalItemCount}")
-                    viewModel.getMedia(MediaViewType.UPCOMING)
+                    viewModel.getMedia(MediaViewType.SEARCH, viewModel._currentList)
                 }
             }
         }
         binding.recyclerView.addOnScrollListener(scrollListener)
-
-
 
         // Pull to refresh
         binding.swipeRefreshLayout.setOnRefreshListener(this)
@@ -84,7 +82,7 @@ class TabUpcomingFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
 
     // For pull to refresh
     override fun onRefresh() {
-        viewModel.refreshList(MediaViewType.UPCOMING)
+        viewModel.refreshList(MediaViewType.SEARCH)
         binding.swipeRefreshLayout.isRefreshing = false
     }
 }

@@ -1,5 +1,6 @@
 package com.falls.remnants.ui.browse
 
+import android.widget.Toast
 import androidx.lifecycle.*
 import com.apollographql.apollo3.exception.ApolloException
 import com.falls.remnants.data.AnilistQueries
@@ -7,6 +8,7 @@ import com.falls.remnants.data.Anime
 import com.falls.remnants.adapter.MediaViewType
 import com.falls.remnants.type.MediaSeason
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
 
@@ -17,13 +19,14 @@ class BrowseViewModel : ViewModel() {
     val animeSeasonal: LiveData<List<Anime>>
         get() = _animeSeasonal
 
-    private val _animeTop = MutableLiveData<List<Anime>>()
-    val animeTop: LiveData<List<Anime>>
-        get() = _animeTop
-
     private val _animeUpcoming = MutableLiveData<List<Anime>>()
     val animeUpcoming: LiveData<List<Anime>>
         get() = _animeUpcoming
+
+    private val _animeSearch = MutableLiveData<List<Anime>>()
+    val animeSearch: LiveData<List<Anime>>
+        get() = _animeSearch
+    var lastQuery = "SEARCH"
 
     // Seasonal filters
     private var _year = 2000
@@ -32,96 +35,86 @@ class BrowseViewModel : ViewModel() {
     // Paging
     private var _seasonalPagesLoaded = 0
     private var _seasonalHasNextPage = true
-    private var _topPagesLoaded = 0
-    private var _topHasNextPage = true
     private var _upcomingPagesLoaded = 0
     private var _upcomingHasNextPage = true
 
-    // Display style
-    var columns = MutableLiveData(1)
-
     init {
-        currentSeason()
+        currentSeason() // Also calls SEASONAL
+
+        getMedia(MediaViewType.UPCOMING) // Preload
     }
 
-    fun getMedia(type: MediaViewType) {
-        when (type) {
-            MediaViewType.SEASONAL -> getSeasonal()
-            MediaViewType.TOP -> getTop()
-            MediaViewType.UPCOMING -> getUpcoming()
-        }
-    }
-
-    // Fetches the season list from the server
-    private fun getSeasonal() {
-
+    fun tempSearch(query: String) {
         viewModelScope.launch {
-            // Don't run if no more pages exist
-            if (!_seasonalHasNextPage) return@launch
-            _seasonalPagesLoaded++
-            val currentSeason = _setSeason
-
             try {
-                val (titles, nextPageExists) = AnilistQueries.seasonal(
-                    _setSeason,
-                    _year,
-                    _seasonalPagesLoaded
-                )
-
-                // View has changed, throw away the old result
-                if (currentSeason != _setSeason) return@launch
-
-                // Append data to any pre-existing data
-                _animeSeasonal.value = _animeSeasonal.value?.plus(titles) ?: titles
-                _seasonalHasNextPage = nextPageExists
+                val result = AnilistQueries.search(query)
+                _animeSearch.value = result
+                Timber.d("Search result: $result")
             } catch (e: ApolloException) {
-                // TODO: Show that query failed (likely 429)
                 Timber.e(e)
-                return@launch
             }
         }
     }
 
-    private fun getTop() {
-
+    fun getMedia(type: MediaViewType, query: String = "") {
         viewModelScope.launch {
-            // Don't run if no more pages exist
-            if (!_topHasNextPage) return@launch
-            _topPagesLoaded++
-
             try {
-                val (titles, nextPageExists) = AnilistQueries.top(
-                    _topPagesLoaded
-                )
+                when (type) {
+                    MediaViewType.SEASONAL -> {
+                        // Don't run if no more pages exist
+                        if (!_seasonalHasNextPage) return@launch
+                        _seasonalPagesLoaded++
 
-                // Append data to any pre-existing data
-                _animeTop.value = _animeTop.value?.plus(titles) ?: titles
-                _topHasNextPage = nextPageExists
-            } catch (e: ApolloException) {
-                // TODO: Show that query failed (likely 429)
-                Timber.e(e)
-                return@launch
-            }
-        }
-    }
+                        val currentSeason = _setSeason
 
+                        // QUERY
+                        val (titles, nextPageExists) = AnilistQueries.seasonal(
+                            _setSeason,
+                            _year,
+                            _seasonalPagesLoaded
+                        )
 
-    private fun getUpcoming() {
+                        // View has changed, throw away the old result
+                        if (currentSeason != _setSeason) return@launch
 
-        viewModelScope.launch {
+                        // Append data to any pre-existing data
+                        _animeSeasonal.value = _animeSeasonal.value?.plus(titles) ?: titles
+                        _seasonalHasNextPage = nextPageExists
 
-            // Don't run if no more pages exist
-            if (!_upcomingHasNextPage) return@launch
-            _upcomingPagesLoaded++
+                        // Remove duplicates
+                        // TODO: Figure out why duplicates are created for first page
+                        _animeSeasonal.value = _animeSeasonal.value?.distinctBy { it.id } ?: titles
 
-            try {
-                val (titles, nextPageExists) = AnilistQueries.upcoming(
-                    _upcomingPagesLoaded
-                )
+                        // Sort list in case it arrives out of order
+                        _animeSeasonal.value = _animeSeasonal.value?.sortedByDescending {
+                            it.popularity.toIntOrNull() ?: 0
+                        }
 
-                // Append data to any pre-existing data
-                _animeUpcoming.value = _animeUpcoming.value?.plus(titles) ?: titles
-                _upcomingHasNextPage = nextPageExists
+                    }
+                    MediaViewType.UPCOMING -> {
+                        // Don't run if no more pages exist
+                        if (!_upcomingHasNextPage) return@launch
+                        _upcomingPagesLoaded++
+
+                        // QUERY
+                        val (titles, nextPageExists) = AnilistQueries.upcoming(
+                            _upcomingPagesLoaded
+                        )
+
+                        // Append data to any pre-existing data
+                        _animeUpcoming.value = _animeUpcoming.value?.plus(titles) ?: titles
+                        _upcomingHasNextPage = nextPageExists
+
+                        // Sort list in case it arrives out of order
+                        _animeUpcoming.value = _animeUpcoming.value?.sortedByDescending {
+                            it.popularity.toIntOrNull() ?: 0
+                        }
+
+                    }
+                    MediaViewType.SEARCH -> {
+                        _animeSearch.value = AnilistQueries.search(query)
+                    }
+                }
             } catch (e: ApolloException) {
                 // TODO: Show that query failed (likely 429)
                 Timber.e(e)
@@ -137,27 +130,27 @@ class BrowseViewModel : ViewModel() {
                 _animeSeasonal.value = emptyList()
                 _seasonalPagesLoaded = 0
                 _seasonalHasNextPage = true
-                getSeasonal()
+                getMedia(MediaViewType.SEASONAL)
             }
             MediaViewType.UPCOMING -> {
                 _animeUpcoming.value = emptyList()
                 _upcomingPagesLoaded = 0
                 _upcomingHasNextPage = true
-                getUpcoming()
+                getMedia(MediaViewType.UPCOMING)
             }
-            MediaViewType.TOP -> {
-                _animeTop.value = emptyList()
-                _topPagesLoaded = 0
-                _topHasNextPage = true
-                getTop()
+            MediaViewType.SEARCH -> {
+                if (lastQuery == "SEARCH") return
+                _animeSearch.value = emptyList()
+                getMedia(MediaViewType.SEARCH, query = lastQuery)
             }
         }
     }
 
+    // Season handling
+
     fun getSeasonYear(): String {
         return "$_setSeason $_year"
     }
-
 
     fun nextSeason() {
         when (_setSeason) {

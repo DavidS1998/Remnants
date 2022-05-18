@@ -1,25 +1,25 @@
 package com.falls.remnants.ui.library
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager2.widget.ViewPager2
 import com.falls.remnants.R
 import com.falls.remnants.adapter.AdapterTabPager
+import com.falls.remnants.adapter.MediaViewType
+import com.falls.remnants.data.Configs
 import com.falls.remnants.data.Utils
 import com.falls.remnants.databinding.FragmentLibraryBinding
-import com.falls.remnants.ui.browse.BrowseViewModel
-import com.falls.remnants.ui.browse.TabSeasonalFragment
-import com.falls.remnants.ui.browse.TabTopFragment
-import com.falls.remnants.ui.browse.TabUpcomingFragment
+import com.falls.remnants.type.MediaStatus
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
+import timber.log.Timber
 
 class LibraryFragment : Fragment() {
 
@@ -32,14 +32,6 @@ class LibraryFragment : Fragment() {
     private lateinit var viewPager: ViewPager2
     private lateinit var pageAdapter: AdapterTabPager
     private val viewModel: LibraryViewModel by activityViewModels()
-
-    override fun onAttach(activity: Activity) {
-        // Apply settings
-        val value = Utils.getSharedSettings(requireActivity(), "columns")
-        viewModel.columns.value = value.toIntOrNull() ?: 1
-
-        super.onAttach(activity)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -71,10 +63,8 @@ class LibraryFragment : Fragment() {
         )
 
 //      Initialize and add tab fragments
-        val tab1 = TabCurrentFragment()
-        pageAdapter.addFragment(tab1)
-//        val tab2 = TabUpcomingFragment()
-//        pageAdapter.addFragment(tab2)
+        pageAdapter.addFragment(TabCurrentFragment())
+        pageAdapter.addFragment(TabUserListFragment())
 
         // TabLayout
         val tabs = binding.tabsLayout
@@ -87,6 +77,31 @@ class LibraryFragment : Fragment() {
             }
         }.attach()
 
+        // Spinner
+        val spinnerArrayAdapter = ArrayAdapter(
+            requireContext(),
+            R.layout.spinner_item_button,
+            resources.getStringArray(R.array.MediaLists)
+        )
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item)
+        binding.spinner.adapter = spinnerArrayAdapter
+
+        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                viewModel.getMedia(MediaViewType.SEARCH)
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // Update the view model
+                if (viewModel._currentList == position) {
+                    return
+                }
+                Timber.d("onItemSelected: $position")
+                viewModel.listChanged()
+                viewModel.getMedia(MediaViewType.SEARCH, position)
+            }
+        }
+
         return binding.root
     }
 
@@ -94,7 +109,9 @@ class LibraryFragment : Fragment() {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         when (viewPager.currentItem) {
 //            0 -> inflater.inflate(R.menu.action_seasonal, menu)
-//            1 -> inflater.inflate(R.menu.action_generic_list, menu)
+            1 -> {
+                // Create spinner menu
+            }
         }
 
         super.onCreateOptionsMenu(menu, inflater)
@@ -103,11 +120,6 @@ class LibraryFragment : Fragment() {
     // Toolbar menu actions
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-//            R.id.next_season -> {
-//                viewModel.nextSeason()
-//                binding.toolbar.title = viewModel.getSeasonYear()
-//                true
-//            }
             R.id.span_size -> {
                 sliderDialog(); true
             }
@@ -125,18 +137,15 @@ class LibraryFragment : Fragment() {
             0 -> {
                 (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
                 binding.toolbar.title = "ACTIVE & AIRING"
+                binding.spinner.visibility = View.GONE
                 setHasOptionsMenu(true)
             }
-//            1 -> {
-//                (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-//                binding.toolbar.title = "UPCOMING"
-//                setHasOptionsMenu(true)
-//            }
-//            2 -> {
-//                (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
-//                binding.toolbar.title = "TOP RATED"
-//                setHasOptionsMenu(true)
-//            }
+            1 -> {
+                (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+                binding.toolbar.title = ""
+                binding.spinner.visibility = View.VISIBLE
+                setHasOptionsMenu(true)
+            }
         }
     }
 
@@ -151,11 +160,12 @@ class LibraryFragment : Fragment() {
         )
             .setTitle("Number of columns to display")
             .setPositiveButton("CONFIRM", null)
-            .setSingleChoiceItems(singleItems, viewModel.columns.value ?: 0) { item, which ->
-                viewModel.columns.value = which
+            .setSingleChoiceItems(singleItems, Configs.columns.value ?: 0) { item, which ->
 
                 // Save column value to shared preferences
+                Configs.columns.value = which
                 Utils.saveSharedSettings(requireActivity(), "columns", which.toString())
+
             }
             .show()
     }
