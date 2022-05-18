@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
+import androidx.transition.TransitionInflater
 import androidx.viewpager2.widget.ViewPager2
 import com.falls.remnants.R
 import com.falls.remnants.adapter.AdapterTabPager
@@ -38,6 +39,10 @@ class BrowseFragment : Fragment() {
     ): View {
 
         _binding = FragmentBrowseBinding.inflate(inflater, container, false)
+
+        // Fade out transition
+        val inflater = TransitionInflater.from(requireContext())
+        exitTransition = inflater.inflateTransition(R.transition.fade)
 
         // Create viewpager
         pageAdapter = AdapterTabPager(activity as FragmentActivity)
@@ -84,7 +89,7 @@ class BrowseFragment : Fragment() {
                 inflateSearch(menu)
             }
             1, 2 -> {
-                inflater.inflate(R.menu.action_generic_list, menu)
+                inflater.inflate(R.menu.action_search, menu)
                 inflateSearch(menu)
             }
         }

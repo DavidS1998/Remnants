@@ -151,9 +151,8 @@ object AnilistQueries {
             score = if ((data.averageScore).toString() == "null") "N/A" else data.averageScore.toString() + "%",
 
             color = data.coverImage?.color ?: "#FFFFFF",
-            bannerPath = data.bannerImage ?: "",
-            coverPath = data.coverImage?.extraLarge ?: data.coverImage?.large
-            ?: data.coverImage?.medium ?: "",
+            coverPath = data.coverImage?.extraLarge ?: data.coverImage?.large ?: data.coverImage?.medium ?: "",
+            bannerPath = data.bannerImage ?: data.coverImage?.extraLarge ?: data.coverImage?.large ?: data.coverImage?.medium ?: ""
         )
     }
 

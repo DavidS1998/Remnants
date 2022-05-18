@@ -50,15 +50,14 @@
                 <ImageView
                     android:id="@+id/banner"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="120dp"
                     android:contentDescription="Anime banner image"
                     android:outlineProvider="bounds"
-                    android:scaleType="fitStart"
+                    android:scaleType="centerCrop"
                     app:ImageUrl="@{anime.bannerPath}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_height="274dp"
                     tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat

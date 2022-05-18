@@ -8,6 +8,11 @@ import android.widget.Toast
 import androidx.core.graphics.alpha
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
+import com.bumptech.glide.TransitionOptions
+import com.bumptech.glide.load.resource.bitmap.BitmapTransitionOptions
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.target.Target
+import com.falls.remnants.R
 import timber.log.Timber
 
 
@@ -17,6 +22,7 @@ fun bindPosterImage(imgView: ImageView, imgUrl: String) {
         Glide
             .with(imgView)
             .load(posterPath)
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(imgView)
     }
 }

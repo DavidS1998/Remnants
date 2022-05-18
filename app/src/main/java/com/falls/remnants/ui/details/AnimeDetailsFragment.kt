@@ -7,9 +7,10 @@ import android.text.Html
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.transition.TransitionInflater
+import com.falls.remnants.R
 import com.falls.remnants.data.Anime
 import com.falls.remnants.databinding.FragmentAnimeDetailsBinding
-import timber.log.Timber
 
 
 class AnimeDetailsFragment : Fragment() {
@@ -29,6 +30,10 @@ class AnimeDetailsFragment : Fragment() {
 
         anime = AnimeDetailsFragmentArgs.fromBundle(requireArguments()).anime
         binding.anime = anime
+
+        val inflater = TransitionInflater.from(requireContext())
+//        enterTransition = inflater.inflateTransition(R.transition.fade)
+        enterTransition = inflater.inflateTransition(R.transition.slide_up)
 
         // Set up the toolbar
         binding.toolbar.title = anime.engTitle

@@ -4,11 +4,11 @@ import android.os.Bundle
 import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.activityViewModels
+import androidx.transition.TransitionInflater
 import androidx.viewpager2.widget.ViewPager2
 import com.falls.remnants.R
 import com.falls.remnants.adapter.AdapterTabPager
@@ -16,7 +16,6 @@ import com.falls.remnants.adapter.MediaViewType
 import com.falls.remnants.data.Configs
 import com.falls.remnants.data.Utils
 import com.falls.remnants.databinding.FragmentLibraryBinding
-import com.falls.remnants.type.MediaStatus
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import timber.log.Timber
@@ -41,9 +40,9 @@ class LibraryFragment : Fragment() {
 
         _binding = FragmentLibraryBinding.inflate(inflater, container, false)
 
-        // Retrieve settings from shared preferences
-//        val value = Utils.getSharedSettings(requireActivity(), "columns")
-//        viewModel.columns.value = value.toIntOrNull() ?: 1
+        // Fade out transition
+        val inflater = TransitionInflater.from(requireContext())
+        exitTransition = inflater.inflateTransition(R.transition.fade)
 
         // Create viewpager
         pageAdapter = AdapterTabPager(activity as FragmentActivity)
@@ -128,7 +127,7 @@ class LibraryFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         when (viewPager.currentItem) {
-            0, 1 -> inflater.inflate(R.menu.action_generic_list, menu)
+            0, 1 -> inflater.inflate(R.menu.action_columns_only, menu)
         }
 
         super.onCreateOptionsMenu(menu, inflater)
