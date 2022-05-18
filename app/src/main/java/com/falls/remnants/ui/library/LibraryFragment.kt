@@ -128,10 +128,7 @@ class LibraryFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         when (viewPager.currentItem) {
-//            0 -> inflater.inflate(R.menu.action_seasonal, menu)
-            1 -> {
-                // Create spinner menu
-            }
+            0, 1 -> inflater.inflate(R.menu.action_generic_list, menu)
         }
 
         super.onCreateOptionsMenu(menu, inflater)

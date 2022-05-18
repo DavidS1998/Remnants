@@ -59,11 +59,14 @@ class MainActivity : AppCompatActivity() {
         if (intent != null) {
             val action = intent.action
             val data = intent.data
+            // Login attempt, redirected from AniList
             if (Intent.ACTION_VIEW == action && data != null) {
                 CoroutineScope(Dispatchers.Main).launch {
                     login(data)
                 }
-            } else {
+            // Launched app normally
+            } else if (Intent.ACTION_MAIN == action) {
+                // Get login data from storage
                 val token = Utils.getSharedSettings(this, "access_token")
                 val userName = Utils.getSharedSettings(this, "username")
                 if (token.isNotEmpty()) {
@@ -79,11 +82,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
     }
 
     private suspend fun login(data: Uri) {
@@ -124,5 +122,10 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Login failed", Toast.LENGTH_LONG).show()
             }
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

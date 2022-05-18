@@ -17,6 +17,11 @@ data class Anime(
     val episodes: String = "",
     val nextEpisode: String = "",
     val nextEpisodeCountdown: String = "",
+    val season: String = "",
+    val year: String = "",
+
+    val start: String = "",
+    val end: String = "",
 
     val description: String = "",
     val score: String = "",

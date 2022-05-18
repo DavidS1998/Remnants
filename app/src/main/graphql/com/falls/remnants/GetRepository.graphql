@@ -48,10 +48,16 @@ query DetailsQuery($id: Int!) {
             medium
             color
         }
+        nextAiringEpisode {
+            episode
+            timeUntilAiring
+        }
         averageScore
         episodes
         description
         format
+        seasonYear
+        season
         startDate {
             year
             month

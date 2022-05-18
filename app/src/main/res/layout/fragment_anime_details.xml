@@ -10,144 +10,439 @@
             type="com.falls.remnants.data.Anime" />
     </data>
 
-    <ScrollView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="56dp"
-        android:background="?colorPrimaryVariant">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraintLayout"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingTop="0dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_scrollFlags="scroll|enterAlways">
 
-            <ImageView
-                android:id="@+id/banner"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                style="@style/Widget.MaterialComponents.TabLayout.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:contentDescription="Anime banner image"
-                android:outlineProvider="bounds"
-                android:scaleType="fitStart"
-                app:ImageUrl="@{anime.bannerPath}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:layout_height="274dp"
-                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+                android:minHeight="?attr/actionBarSize"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:titleTextColor="@color/white"
+                tools:title="Kaguya-sama: Love is War" />
+        </com.google.android.material.appbar.AppBarLayout>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/info_card"
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_marginBottom="56dp"
+            android:background="?colorPrimaryVariant">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?colorPrimary"
-                android:orientation="horizontal"
-                android:outlineProvider="bounds"
-                android:translationZ="6dp"
-                app:elevation="6dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/banner">
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:contentDescription="Anime banner image"
+                    android:outlineProvider="bounds"
+                    android:scaleType="fitStart"
+                    app:ImageUrl="@{anime.bannerPath}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:layout_height="274dp"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:id="@+id/info_card"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?colorPrimary"
+                    android:orientation="horizontal"
+                    android:outlineProvider="bounds"
+                    android:translationZ="6dp"
+                    app:elevation="6dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/banner">
 
-                    <ImageView
-                        android:id="@+id/cover"
-                        android:layout_width="140dp"
-                        android:layout_height="200dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="4dp"
-                        android:contentDescription="@string/media_cover_image"
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="172dp"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
 
-                        android:elevation="10dp"
+                        <ImageView
+                            android:id="@+id/cover"
+                            android:layout_width="140dp"
+                            android:layout_height="200dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="4dp"
+                            android:contentDescription="@string/media_cover_image"
 
-                        android:outlineProvider="bounds"
-                        android:scaleType="centerCrop"
-                        android:shadowRadius="10"
-                        android:translationZ="6dp"
+                            android:elevation="10dp"
 
-                        app:ImageUrl="@{anime.coverPath}"
-                        app:elevation="6dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintDimensionRatio="0.7:1"
+                            android:outlineProvider="bounds"
+                            android:scaleType="centerCrop"
+                            android:shadowRadius="10"
+                            android:translationZ="6dp"
 
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="parent"
-                        tools:srcCompat="@tools:sample/avatars" />
+                            app:ImageUrl="@{anime.coverPath}"
+                            app:elevation="6dp"
 
-                    <Button
-                        android:id="@+id/anilist_button"
+                            app:layout_constraintDimensionRatio="0.7:1"
+
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:srcCompat="@tools:sample/avatars" />
+
+                        <Button
+                            android:id="@+id/anilist_button"
+                            SetColorBackground="@{anime.color}"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="16dp"
+
+                            android:layout_marginBottom="8dp"
+
+                            android:text="AniList"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toTopOf="@+id/status"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/cover"
+                            app:layout_constraintTop_toBottomOf="@+id/cover"
+                            tools:backgroundTint="#4DD0E1" />
+
+                        <TextView
+                            android:id="@+id/status"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="-8dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="8dp"
+                            android:text="@{anime.nextEpisode}"
+                            android:textAlignment="center"
+                            android:textColor="#CCFFFFFF"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/anilist_button"
+                            app:layout_constraintVertical_bias="1.0"
+                            tools:text="Next in 12 days" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:backgroundTint="?colorSecondary"
-                        android:text="AniList"
-                        android:textColor="?android:textColor"
-                        android:textSize="12sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/cover"
-                        app:layout_constraintTop_toTopOf="@+id/eng_title" />
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/score"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="@{anime.score}"
+
+                            tools:textColor="#4DD0E1"
+                            SetColorAccent="@{anime.color}"
+
+                            android:textSize="28sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="91%" />
+
+                        <TextView
+                            android:id="@+id/eng_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="4dp"
+                            android:text="@{anime.engTitle}"
+                            android:textColor="@color/white"
+                            android:textSize="20sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/score"
+                            tools:text="Kaguya Wants to be Confessed To" />
+
+                        <TextView
+                            android:id="@+id/jap_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="4dp"
+                            android:layout_marginEnd="16dp"
+                            android:layout_marginBottom="16dp"
+                            android:text="@{anime.japTitle}"
+                            android:textColor="#CCFFFFFF"
+                            android:textSize="18sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/eng_title"
+                            tools:text="Kaguya-sama wa Kokurasetai: Ultra Romantic" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:id="@+id/stats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?colorPrimary"
+                    android:orientation="vertical"
+                    android:outlineProvider="paddedBounds"
+                    android:translationZ="6dp"
+                    app:elevation="6dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/info_card">
 
-                    <TextView
-                        android:id="@+id/eng_title"
+                    <HorizontalScrollView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="4dp"
-                        android:text="@{anime.engTitle}"
-                        android:textColor="?android:textColor"
-                        android:textSize="20sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/cover"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="Kaguya Wants to be Confessed To" />
+                        android:orientation="horizontal"
+                        android:padding="8dp"
+>
+                        <!--STATUS-->
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/jap_title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
-                        android:text="@{anime.japTitle}"
-                        android:textColor="#CCFFFFFF"
-                        android:textSize="18sp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@+id/cover"
-                        app:layout_constraintTop_toTopOf="@+id/eng_title"
-                        tools:text="Kaguya-sama wa Kokurasetai: Ultra Romantic" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#CCFFFFFF"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="Status" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                tools:textColor="#4DD0E1"
+                                SetColorAccent="@{anime.color}"
+
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="@{anime.status}"
+                                tools:text="CANCELLED" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <!--FORMAT-->
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#CCFFFFFF"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="Format" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                tools:textColor="#4DD0E1"
+                                SetColorAccent="@{anime.color}"
+
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="@{anime.format}"
+                                tools:text="SPECIALS" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <!--EPISODES-->
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="70dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#CCFFFFFF"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="Episodes" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                tools:textColor="#4DD0E1"
+                                SetColorAccent="@{anime.color}"
+
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="@{anime.episodes}"
+                                tools:text="24" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <!--SEASON-->
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="120dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#CCFFFFFF"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="Season" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+
+                                tools:textColor="#4DD0E1"
+                                SetColorAccent="@{anime.color}"
+
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="@{anime.season + ` ` + anime.year}"
+                                tools:text="SUMMER 2022" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <!--START-->
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="110dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#CCFFFFFF"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="Start" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                tools:textColor="#4DD0E1"
+                                SetColorAccent="@{anime.color}"
+
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="@{anime.start}"
+                                tools:text="MAY 23, 2022 " />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <!--END-->
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="110dp"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#CCFFFFFF"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="End" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                tools:textColor="#4DD0E1"
+                                SetColorAccent="@{anime.color}"
+
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="@{anime.end}"
+                                tools:text="JUN 27, 2020 " />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+
+
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+                    </HorizontalScrollView>
+
+
                 </androidx.appcompat.widget.LinearLayoutCompat>
-            </androidx.appcompat.widget.LinearLayoutCompat>
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="1dp"
-                android:background="?colorPrimary"
-                android:orientation="vertical"
-                android:outlineProvider="paddedBounds"
-                android:translationZ="6dp"
-                app:elevation="6dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/info_card">
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?colorPrimary"
+                    android:orientation="vertical"
+                    android:outlineProvider="paddedBounds"
+                    android:translationZ="6dp"
+                    app:elevation="6dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/stats">
 
                     <TextView
                         android:id="@+id/description_text"
@@ -159,11 +454,12 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/cover"
                         app:layout_constraintTop_toTopOf="parent"
-                        tools:text="As leaders of their prestigious academy’s student council, Kaguya and Miyuki are the elite of the elite! But it’s lonely at the top… Luckily for them, they’ve fallen in love! There’s just one problem—they both have too much pride to admit it. And so begins the daily scheming to get the object of their affection to confess their romantic feelings first… Love is a war you win by losing."/>
+                        tools:text="As leaders of their prestigious academy’s student council, Kaguya and Miyuki are the elite of the elite! But it’s lonely at the top… Luckily for them, they’ve fallen in love! There’s just one problem—they both have too much pride to admit it. And so begins the daily scheming to get the object of their affection to confess their romantic feelings first… Love is a war you win by losing." />
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
