@@ -69,6 +69,11 @@ query DetailsQuery($id: Int!) {
             day
         }
         status
+#        mediaListEntry {
+#            status
+#            score
+#            progress
+#        }
     }
 }
 
@@ -105,6 +110,7 @@ query UserAiringQuery($pageNumber: Int!, $user: String!, $list: MediaListStatus,
     }
 }
 
+# USER INFO
 query UserInfoQuery {
     user: Viewer {
         id

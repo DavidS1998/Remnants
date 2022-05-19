@@ -116,7 +116,7 @@ class BrowseViewModel : ViewModel() {
                     }
                 }
             } catch (e: ApolloException) {
-                // TODO: Show that query failed (likely 429)
+                // TODO: Show that query failed (likely 429) Toast?
                 Timber.e(e)
                 return@launch
             }

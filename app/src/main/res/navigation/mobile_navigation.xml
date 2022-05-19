@@ -38,4 +38,24 @@
             android:name="Anime"
             app:argType="com.falls.remnants.data.Anime" />
     </fragment>
+    <fragment
+        android:id="@+id/tabCurrentFragment"
+        android:name="com.falls.remnants.ui.library.TabCurrentFragment"
+        android:label="TabCurrentFragment" />
+    <fragment
+        android:id="@+id/tabSearchFragment"
+        android:name="com.falls.remnants.ui.browse.TabSearchFragment"
+        android:label="TabSearchFragment" />
+    <fragment
+        android:id="@+id/tabSeasonalFragment"
+        android:name="com.falls.remnants.ui.browse.TabSeasonalFragment"
+        android:label="TabSeasonalFragment" />
+    <fragment
+        android:id="@+id/tabUpcomingFragment"
+        android:name="com.falls.remnants.ui.browse.TabUpcomingFragment"
+        android:label="TabUpcomingFragment" />
+    <fragment
+        android:id="@+id/tabUserListFragment"
+        android:name="com.falls.remnants.ui.library.TabUserListFragment"
+        android:label="TabUserListFragment" />
 </navigation>

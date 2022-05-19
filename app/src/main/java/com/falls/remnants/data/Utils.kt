@@ -5,12 +5,11 @@ import android.app.Activity
 object Utils {
 
     // Format date and episode data to a single string
-    fun formatEpisodes(timestamp: Int, episode: Int, totalEpisodes: Int, status: String, includeEpisode: Boolean = true) : String {
+    fun formatEpisodes(timestamp: Int, episode: Int, totalEpisodes: Int, status: String) : String {
         val totalEpisodesCounter: String = if (totalEpisodes < 0) "?" else totalEpisodes.toString()
         var episodeCounter: String = if (episode < 0) "?" else episode.toString()
         episodeCounter = "Ep. ${episodeCounter}/${totalEpisodesCounter}"
 
-        if (status == "FINISHED" && includeEpisode) return ""
         if (status == "FINISHED") return "Finished ${totalEpisodesCounter}/${totalEpisodesCounter}"
 
         // Airing date unknown
@@ -18,7 +17,6 @@ object Utils {
         // ?/? in ?
         if (timestamp < 0 && status == "RELEASING") return "$episodeCounter in ?"
         // No info known
-        if (timestamp < 0 && status == "NOT_YET_RELEASED" && includeEpisode) return ""
         if (timestamp < 0 && status == "NOT_YET_RELEASED") return "TBD"
 
         // If airing date exists, calculate it

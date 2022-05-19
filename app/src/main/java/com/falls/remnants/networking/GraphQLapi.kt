@@ -43,5 +43,10 @@ open class GraphQLapi {
                 created
             }
         }
+
+        fun resetInstances() {
+            INSTANCE = null
+            INSTANCE2 = null
+        }
     }
 }

@@ -41,8 +41,8 @@ class LibraryFragment : Fragment() {
         _binding = FragmentLibraryBinding.inflate(inflater, container, false)
 
         // Fade out transition
-        val inflater = TransitionInflater.from(requireContext())
-        exitTransition = inflater.inflateTransition(R.transition.fade)
+        val transition = TransitionInflater.from(requireContext())
+        exitTransition = transition.inflateTransition(R.transition.fade)
 
         // Create viewpager
         pageAdapter = AdapterTabPager(activity as FragmentActivity)
@@ -70,7 +70,7 @@ class LibraryFragment : Fragment() {
         TabLayoutMediator(tabs, binding.viewpager) { tab, position ->
             tab.text = when (position) {
                 // TODO: Programmatically set the tab text from page adapter
-                0 -> "Current"
+                0 -> "Airing"
                 1 -> "Library"
                 else -> "What"
             }

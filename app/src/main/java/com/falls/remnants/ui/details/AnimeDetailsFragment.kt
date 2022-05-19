@@ -31,9 +31,8 @@ class AnimeDetailsFragment : Fragment() {
         anime = AnimeDetailsFragmentArgs.fromBundle(requireArguments()).anime
         binding.anime = anime
 
-        val inflater = TransitionInflater.from(requireContext())
-//        enterTransition = inflater.inflateTransition(R.transition.fade)
-        enterTransition = inflater.inflateTransition(R.transition.slide_up)
+        val transition = TransitionInflater.from(requireContext())
+        enterTransition = transition.inflateTransition(R.transition.slide_up)
 
         // Set up the toolbar
         binding.toolbar.title = anime.engTitle

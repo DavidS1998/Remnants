@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
             // Login attempt, redirected from AniList
             if (Intent.ACTION_VIEW == action && data != null) {
                 CoroutineScope(Dispatchers.Main).launch {
+                    GraphQLapi.resetInstances()
                     login(data)
                 }
             // Launched app normally

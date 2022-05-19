@@ -23,9 +23,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 class BrowseFragment : Fragment() {
 
     private var _binding: FragmentBrowseBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     private lateinit var viewPager: ViewPager2
@@ -41,8 +38,8 @@ class BrowseFragment : Fragment() {
         _binding = FragmentBrowseBinding.inflate(inflater, container, false)
 
         // Fade out transition
-        val inflater = TransitionInflater.from(requireContext())
-        exitTransition = inflater.inflateTransition(R.transition.fade)
+        val transition = TransitionInflater.from(requireContext())
+        exitTransition = transition.inflateTransition(R.transition.fade)
 
         // Create viewpager
         pageAdapter = AdapterTabPager(activity as FragmentActivity)
