@@ -11,6 +11,7 @@ open class GraphQLapi {
         private var INSTANCE: ApolloClient? = null
 
         fun getInstance(): ApolloClient {
+            if (Configs.loggedIn.value == true) return getLoggedInInstance(Configs.token)
 
             return INSTANCE ?: synchronized(this) {
                 val created: ApolloClient =

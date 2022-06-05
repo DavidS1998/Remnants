@@ -168,7 +168,7 @@ class LibraryFragment : Fragment() {
     // TODO: Set default based on resolution
     // Select view mode
     private fun sliderDialog() {
-        val singleItems = arrayOf("1", "2", "3", "4", "5", "6", "7", "8")
+        val singleItems = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
 //
         MaterialAlertDialogBuilder(
             requireContext(),

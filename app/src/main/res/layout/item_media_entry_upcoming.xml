@@ -72,6 +72,21 @@
             app:layout_constraintEnd_toEndOf="@+id/media_cover"
             app:layout_constraintTop_toTopOf="@+id/media_cover" />
 
+        <View
+            android:id="@+id/stripe"
+            android:layout_width="match_parent"
+            tools:layout_width="210dp"
+            android:layout_height="5dp"
+            android:background="#FF5F1F"
+
+            android:visibility="visible"
+            tools:visibility="visible"
+
+
+            app:layout_constraintEnd_toEndOf="@+id/media_cover"
+            app:layout_constraintTop_toTopOf="@+id/media_cover" />
+
+
         <TextView
             android:id="@+id/type"
             android:layout_width="match_parent"

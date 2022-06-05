@@ -25,11 +25,28 @@ class AnimeDetailsViewModel(
     val anime: LiveData<Anime>
         get() = _anime
 
+    private val _relatedAnime = MutableLiveData<List<Anime>>()
+    val relatedAnime: LiveData<List<Anime>>
+        get() = _relatedAnime
+
     // Fetches the details from the server
     fun getAnimeDetails(id: Int) {
         viewModelScope.launch {
             try {
-                _anime.value = AnilistQueries.details(id)
+                val response = AnilistQueries.details(id)
+                _anime.value = response
+
+                // Filter out MANGA, NOVEL, and ONE_SHOT from relations formats
+                val relations = response.relations.filter {
+                    it.format != "MANGA" && it.format != "NOVEL" && it.format != "ONE_SHOT"
+                }.sortedBy { it.id }
+
+//                // Sort by ID
+//                response.relations.sortedBy { it.id }.forEach { Timber.d("${it.id} ${it.engTitle}")}
+
+                // Add relations
+                _relatedAnime.value = relations
+
             } catch (e: ApolloException) {
                 Timber.e(e)
             }

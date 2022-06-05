@@ -7,10 +7,16 @@ import android.text.Html
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.transition.TransitionInflater
 import com.falls.remnants.R
+import com.falls.remnants.adapter.AdapterClickListener
+import com.falls.remnants.adapter.MediaListAdapter
+import com.falls.remnants.adapter.MediaViewType
 import com.falls.remnants.data.Anime
+import com.falls.remnants.data.Configs
 import com.falls.remnants.databinding.FragmentAnimeDetailsBinding
+import com.falls.remnants.ui.library.LibraryFragmentDirections
 
 
 class AnimeDetailsFragment : Fragment() {
@@ -19,6 +25,7 @@ class AnimeDetailsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: AnimeDetailsViewModel
+    private lateinit var adapter: MediaListAdapter
 
     private lateinit var anime: Anime
 
@@ -57,11 +64,43 @@ class AnimeDetailsFragment : Fragment() {
         }
         viewModel.getAnimeDetails(anime.id)
 
+        // Hide personal stats if not logged in
+        if (Configs.loggedIn.value == true) {
+            binding.user.visibility = View.VISIBLE
+        } else {
+            binding.user.visibility = View.GONE
+        }
+
+        // Recycler view adapter
+        adapter = MediaListAdapter(
+            AdapterClickListener {
+                val action =
+                    AnimeDetailsFragmentDirections.actionAnimeDetailsFragmentSelf(it)
+                findNavController().navigate(action)
+            }, MediaViewType.RELATED
+        )
+        binding.recyclerView.adapter = adapter
+        viewModel.relatedAnime.observe(viewLifecycleOwner) { anime ->
+            anime?.let {
+                adapter.submitList(anime)
+                binding.recyclerView.scrollToPosition(0)
+            }
+        }
+
         // AniList button
         binding.anilistButton.setOnClickListener {
             val imdbIntent =
                 Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://anilist.co/anime/" + binding.anime?.id)
+                )
+            startActivity(imdbIntent)
+        }
+
+        // MAL button
+        binding.malButton.setOnClickListener {
+            val imdbIntent =
+                Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://myanimelist.net/anime/" + binding.anime?.idMAL)
                 )
             startActivity(imdbIntent)
         }

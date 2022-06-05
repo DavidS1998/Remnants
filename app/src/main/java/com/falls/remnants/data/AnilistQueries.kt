@@ -13,6 +13,7 @@ object AnilistQueries {
     private fun formatAnime(response: ApolloResponse<BrowseQuery.Data>): List<Anime> {
 
         Timber.d("QUERY SENT, PAGE: ${response.data?.page?.pageInfo?.currentPage}")
+        Timber.d(response.data?.toString())
 
         return response.data?.page?.media?.mapNotNull {
             Anime(
@@ -37,6 +38,10 @@ object AnilistQueries {
                 ),
                 nextEpisodeCountdown = it.nextAiringEpisode?.timeUntilAiring?.toString() ?: "-1",
                 color = it.coverImage?.color ?: "#FFFFFF",
+
+                isOnList = it.mediaListEntry != null,
+                userStatus = it.mediaListEntry?.status?.toString() ?: "N/A",
+                userProgress = it.mediaListEntry?.progress?.toString() ?: "N/A",
 
                 coverPath = it.coverImage?.extraLarge ?: it.coverImage?.large
                 ?: it.coverImage?.medium ?: "", // XL > L > M > None
@@ -113,6 +118,7 @@ object AnilistQueries {
 
         return Anime(
             id = data?.id!!,
+            idMAL = data.idMal ?: 0,
             engTitle = data.title?.english ?: data.title?.romaji ?: "",
             japTitle = if (data.title?.romaji.equals(
                     data.title?.english ?: data.title?.romaji
@@ -134,6 +140,10 @@ object AnilistQueries {
             year = data.seasonYear?.toString() ?: "?",
             episodes = data.episodes?.toString() ?: "?",
 
+            userProgress = if (data.mediaListEntry?.progress == null) "-" else data.mediaListEntry.progress.toString() + "/" + (data.episodes?.toString() ?: "?"),
+            userScore = if (data.mediaListEntry?.score == null) "-" else if (data.mediaListEntry.score == 0.0) "-" else data.mediaListEntry.score.toString() + "%",
+            userStatus = (data.mediaListEntry?.status)?.toString() ?: "-",
+
             nextEpisode = Utils.formatRemaining(
                 data.nextAiringEpisode?.timeUntilAiring ?: -1,
             ) ?: "",
@@ -152,7 +162,42 @@ object AnilistQueries {
 
             color = data.coverImage?.color ?: "#FFFFFF",
             coverPath = data.coverImage?.extraLarge ?: data.coverImage?.large ?: data.coverImage?.medium ?: "",
-            bannerPath = data.bannerImage ?: data.coverImage?.extraLarge ?: data.coverImage?.large ?: data.coverImage?.medium ?: ""
+            bannerPath = data.bannerImage ?: data.coverImage?.extraLarge ?: data.coverImage?.large ?: data.coverImage?.medium ?: "",
+
+            genres = data.genres?.joinToString(separator = "\n") ?: "",
+
+            // Only get animation studio names if there are any
+            studios = data.studios?.nodes?.filter { it?.isAnimationStudio == true }?.joinToString(separator = "\n") { it?.name ?: "" } ?: "",
+
+            relations = data.relations?.edges?.mapNotNull {
+                it?.node?.let { it1 ->
+                    Anime(
+                        id = it1.id,
+                        engTitle = it1.title?.english ?: it1.title?.romaji ?: "",
+                        japTitle = if (it1.title?.romaji.equals(it1.title?.english ?: it1.title?.romaji)) "" // If same, empty
+                        else it1.title?.romaji ?: "",
+
+                        coverPath = it1.coverImage?.extraLarge ?: it1.coverImage?.large ?: it1.coverImage?.medium ?: "",
+
+                        format = when {
+                            it1.format.toString() == "TV_SHORT" -> "SHORT"
+                            it1.format.toString() == "null" -> "?"
+                            else -> it1.format.toString()
+                        },
+                        status = when {
+                            it1.status?.toString() == "NOT_YET_RELEASED" -> "UNRELEASED"
+                            else -> it1.status?.toString() ?: "?"
+                        },
+
+                        isOnList = it1.mediaListEntry != null,
+                        userStatus = (it1.mediaListEntry?.status)?.toString() ?: "-",
+
+                        // Convert underscore to space in relationType
+                        relationType = it.relationType.toString().replace("_", " "),
+                    )
+
+                }
+            } ?: listOf(),
         )
     }
 
@@ -200,6 +245,10 @@ object AnilistQueries {
                     status = it.status?.toString() ?: "?",
                     score = it2.score?.toInt()?.toString() ?: "?",
 
+                    userProgress = it2.progress?.toString() ?: "?",
+                    userStatus = it2.status?.toString() ?: "?",
+                    userScore = it2.score?.toInt()?.toString() ?: "?",
+
                     nextEpisodeCountdown = it.nextAiringEpisode?.timeUntilAiring?.toString()
                         ?: "-1",
                     nextEpisode = Utils.formatEpisodes(
@@ -208,6 +257,7 @@ object AnilistQueries {
                         it.episodes ?: -1,
                         it.status?.name ?: ""
                     ),
+                    latestEpisode = if (it.nextAiringEpisode?.episode.toString() != "null") it.nextAiringEpisode?.episode.toString() else "-1",
 
                     coverPath = it.coverImage?.extraLarge ?: it.coverImage?.large
                     ?: it.coverImage?.medium ?: "", // XL > L > M > None

@@ -34,15 +34,16 @@ class LibraryViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 when (type) {
+                    // Airing
                     MediaViewType.SEASONAL -> {
                         if (!_currentHasNextPage) return@launch
                         _currentPagesLoaded++
 
                         var (titles, nextPageExists) = AnilistQueries.library(
-                            page = _currentPagesLoaded,
+                            page = _currentPagesLoaded
                         )
 
-                        // Filter non-releasing anime
+                        // Filter out non-releasing anime
                         titles = titles.filter { it.status == "RELEASING" }
 
                         // Append data to any pre-existing data
@@ -57,6 +58,7 @@ class LibraryViewModel : ViewModel() {
                         // Iterate through whole list
                         getMedia(MediaViewType.SEASONAL)
                     }
+                    // Library
                     MediaViewType.SEARCH -> {
                         if (!_libraryHasNextPage) return@launch
                         _libraryPagesLoaded++
@@ -64,6 +66,7 @@ class LibraryViewModel : ViewModel() {
 
                         var specificSortingOrder: MediaListSort = MediaListSort.MEDIA_POPULARITY_DESC
                         if (list == 1) { specificSortingOrder = MediaListSort.SCORE_DESC }
+                        else if (list == 0) { specificSortingOrder = MediaListSort.UPDATED_TIME_DESC }
 
                         val stringOfList = when (list) {
                             0 -> MediaListStatus.CURRENT
@@ -90,10 +93,11 @@ class LibraryViewModel : ViewModel() {
                         _animeLibrary.value = _animeLibrary.value?.distinctBy { it.id } ?: titles
 
                         // Sort list in case it arrives out of order
-                        _animeLibrary.value = _animeLibrary.value?.sortedByDescending {
-                            it.score.toIntOrNull() ?: 0
-                        }
+//                        _animeLibrary.value = _animeLibrary.value?.sortedByDescending {
+//                            it.score.toIntOrNull() ?: 0
+//                        }
                     }
+                    else -> {}
                 }
             } catch (e: ApolloException) {
                 // TODO: Show that query failed (likely 429)

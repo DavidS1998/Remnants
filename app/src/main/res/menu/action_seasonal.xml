@@ -31,4 +31,9 @@
         android:id="@+id/span_size"
         android:title="Columns"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/toggle_user_list"
+        android:title="Toggle listed only"
+        app:showAsAction="never"/>
 </menu>

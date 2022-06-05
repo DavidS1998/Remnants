@@ -123,6 +123,10 @@ class BrowseFragment : Fragment() {
                 imm.showSoftInput(item.actionView, InputMethodManager.SHOW_IMPLICIT)
                 true
             }
+            R.id.toggle_user_list -> {
+                viewModel.toggleShowOnlyUserAnime()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -193,7 +197,7 @@ class BrowseFragment : Fragment() {
     // TODO: Set default based on resolution
     // Select view mode
     private fun sliderDialog() {
-        val singleItems = arrayOf("1", "2", "3", "4", "5", "6", "7", "8")
+        val singleItems = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
 
         MaterialAlertDialogBuilder(
             requireContext(),

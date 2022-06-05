@@ -37,6 +37,9 @@
         <argument
             android:name="Anime"
             app:argType="com.falls.remnants.data.Anime" />
+        <action
+            android:id="@+id/action_animeDetailsFragment_self"
+            app:destination="@id/animeDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/tabCurrentFragment"

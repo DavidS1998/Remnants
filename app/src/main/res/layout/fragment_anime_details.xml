@@ -112,16 +112,36 @@
                             android:layout_marginTop="4dp"
                             android:layout_marginEnd="16dp"
 
-                            android:layout_marginBottom="8dp"
+                            android:layout_marginBottom="0dp"
 
                             android:text="AniList"
                             android:textColor="@color/black"
                             android:textSize="12sp"
-                            app:layout_constraintBottom_toTopOf="@+id/status"
+                            app:layout_constraintBottom_toTopOf="@+id/mal_button"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@+id/cover"
                             app:layout_constraintTop_toBottomOf="@+id/cover"
                             tools:backgroundTint="#4DD0E1" />
+
+                        <Button
+                            android:id="@+id/mal_button"
+                            android:backgroundTint="#2e51a2"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="0dp"
+                            android:layout_marginEnd="16dp"
+
+                            android:layout_marginBottom="8dp"
+
+                            android:text="MyAnimeList"
+                            android:textColor="@color/white"
+                            android:textSize="12sp"
+                            app:layout_constraintBottom_toTopOf="@+id/status"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/anilist_button"
+                            app:layout_constraintTop_toBottomOf="@+id/anilist_button"
+                            tools:backgroundTint="#2e51a2" />
 
                         <TextView
                             android:id="@+id/status"
@@ -139,7 +159,7 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="1.0"
                             app:layout_constraintStart_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/anilist_button"
+                            app:layout_constraintTop_toBottomOf="@+id/mal_button"
                             app:layout_constraintVertical_bias="1.0"
                             tools:text="Next in 12 days" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -204,7 +224,7 @@
                 </androidx.appcompat.widget.LinearLayoutCompat>
 
                 <androidx.appcompat.widget.LinearLayoutCompat
-                    android:id="@+id/stats"
+                    android:id="@+id/user"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -221,6 +241,133 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content">
 
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="8dp"
+                            >
+                            <!--SCORE-->
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#CCFFFFFF"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="Score" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    tools:textColor="#4DD0E1"
+                                    SetColorAccent="@{anime.color}"
+
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="@{anime.userScore}"
+                                    tools:text="93%" />
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <!--PROGRESS-->
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#CCFFFFFF"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="Progress" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    tools:textColor="#4DD0E1"
+                                    SetColorAccent="@{anime.color}"
+
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="@{anime.userProgress}"
+                                    tools:text="5/24" />
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <!--STATUS-->
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#CCFFFFFF"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="Status" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    tools:textColor="#4DD0E1"
+                                    SetColorAccent="@{anime.color}"
+
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="@{anime.userStatus}"
+                                    tools:text="COMPLETED" />
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                    </HorizontalScrollView>
+
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/stats"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?colorPrimary"
+                    android:orientation="vertical"
+                    android:outlineProvider="paddedBounds"
+                    android:translationZ="6dp"
+                    app:elevation="6dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/user">
+
+                    <HorizontalScrollView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content">
+
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -229,7 +376,7 @@
 >
                         <!--STATUS-->
                         <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="100dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:orientation="vertical">
@@ -261,7 +408,7 @@
 
                         <!--FORMAT-->
                         <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="80dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:orientation="vertical">
@@ -293,7 +440,7 @@
 
                         <!--EPISODES-->
                         <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="70dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:orientation="vertical">
@@ -325,7 +472,7 @@
 
                         <!--SEASON-->
                         <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="120dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:orientation="vertical">
@@ -340,7 +487,7 @@
                                 app:layout_constraintTop_toTopOf="parent"
                                 android:text="Season" />
                             <TextView
-                                android:layout_width="match_parent"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
 
                                 tools:textColor="#4DD0E1"
@@ -357,7 +504,7 @@
 
                         <!--START-->
                         <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="110dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:orientation="vertical">
@@ -389,7 +536,7 @@
 
                         <!--END-->
                         <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="110dp"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_margin="8dp"
                             android:orientation="vertical">
@@ -419,9 +566,6 @@
                                 tools:text="JUN 27, 2020 " />
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
-
-
-
                     </androidx.appcompat.widget.LinearLayoutCompat>
                     </HorizontalScrollView>
 
@@ -439,7 +583,6 @@
                     android:outlineProvider="paddedBounds"
                     android:translationZ="6dp"
                     app:elevation="6dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/stats">
 
@@ -454,6 +597,127 @@
                         app:layout_constraintStart_toEndOf="@+id/cover"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="As leaders of their prestigious academy’s student council, Kaguya and Miyuki are the elite of the elite! But it’s lonely at the top… Luckily for them, they’ve fallen in love! There’s just one problem—they both have too much pride to admit it. And so begins the daily scheming to get the object of their affection to confess their romantic feelings first… Love is a war you win by losing." />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/extra_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?colorPrimary"
+                    android:orientation="vertical"
+                    android:outlineProvider="paddedBounds"
+                    android:translationZ="6dp"
+                    app:elevation="6dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/description">
+
+                    <HorizontalScrollView
+                        android:layout_height="wrap_content"
+                        android:layout_width="wrap_content">
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="8dp"
+                            >
+                            <!--GENRES-->
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#CCFFFFFF"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="Genres" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    tools:textColor="#4DD0E1"
+                                    SetColorAccent="@{anime.color}"
+
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="@{anime.genres}"
+                                    tools:text="Action\nDrama\nFantasy" />
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <!--STUDIOS-->
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#CCFFFFFF"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="Studios" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    tools:textColor="#4DD0E1"
+                                    SetColorAccent="@{anime.color}"
+
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="@{anime.studios}"
+                                    tools:text="Wit Studio\nKyoto Animation" />
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                    </HorizontalScrollView>
+
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/relations"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?colorPrimary"
+                    android:orientation="vertical"
+                    android:outlineProvider="paddedBounds"
+                    android:translationZ="6dp"
+                    app:elevation="6dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/extra_details">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        android:orientation="horizontal"
+                        app:spanCount="1"
+                        tools:listitem="@layout/item_media_entry_related" />
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.constraintlayout.widget.ConstraintLayout>

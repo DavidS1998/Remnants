@@ -1,6 +1,7 @@
 # BROWSING
 query BrowseQuery($pageNumber: Int!, $season: MediaSeason @optional, $year: Int @optional,
-                $sort: [MediaSort], $status: MediaStatus @optional, $search: String @optional) {
+    $sort: [MediaSort], $status: MediaStatus @optional, $search: String @optional) {
+
     page: Page(page: $pageNumber, perPage: 30) {
         pageInfo {
             currentPage
@@ -29,6 +30,12 @@ query BrowseQuery($pageNumber: Int!, $season: MediaSeason @optional, $year: Int 
             status
             averageScore
             meanScore
+
+            mediaListEntry {
+                status
+                score
+                progress
+            }
         }
     }
 }
@@ -37,6 +44,7 @@ query BrowseQuery($pageNumber: Int!, $season: MediaSeason @optional, $year: Int 
 query DetailsQuery($id: Int!) {
     anime: Media(id: $id) {
         id
+        idMal
         title {
             romaji
             english
@@ -69,11 +77,47 @@ query DetailsQuery($id: Int!) {
             day
         }
         status
-#        mediaListEntry {
-#            status
-#            score
-#            progress
-#        }
+
+        mediaListEntry {
+            status
+            score(format: POINT_100)
+            progress
+        }
+
+        genres
+        studios {
+            nodes {
+                name
+                isAnimationStudio
+            }
+        }
+
+        relations {
+            edges {
+                relationType
+                node {
+                    id
+                    type
+                    title {
+                        romaji
+                        english
+                    }
+                    type
+                    format
+                    status
+                    coverImage {
+                        extraLarge
+                        large
+                        medium
+                        color
+                    }
+                    mediaListEntry {
+                        status
+                    }
+                }
+            }
+
+        }
     }
 }
 
@@ -86,6 +130,9 @@ query UserAiringQuery($pageNumber: Int!, $user: String!, $list: MediaListStatus,
 
         mediaList(userName: $user, status: $list, sort: $sort, type: ANIME) {
             score(format: POINT_100)
+            progress
+            status
+
             media {
                 id
                 title {

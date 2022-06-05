@@ -58,19 +58,19 @@
             android:maxLines="3"/>
 
         <TextView
-            android:id="@+id/next_episode"
+            android:id="@+id/countdown"
+            text="@{anime.nextEpisode}"
             android:layout_width="match_parent"
-            tools:layout_width="210dp"
             android:layout_height="34dp"
 
-            text="@{anime.nextEpisode}"
-            tools:text="Episode 5"
             android:background="#99000000"
-            android:textColor="#FFFFFF"
             android:padding="8dp"
-
+            android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="@+id/media_cover"
-            app:layout_constraintTop_toTopOf="@+id/media_cover" />
+
+            app:layout_constraintTop_toTopOf="@+id/media_cover"
+            tools:layout_width="210dp"
+            tools:text="Episode 5/13 in 3 days" />
 
         <View
             android:id="@+id/stripe"
@@ -79,27 +79,34 @@
             android:layout_height="5dp"
             android:background="#42A5F5"
 
-            android:visibility="gone"
+            android:visibility="visible"
             tools:visibility="visible"
 
 
             app:layout_constraintEnd_toEndOf="@+id/media_cover"
             app:layout_constraintTop_toTopOf="@+id/media_cover" />
 
+
         <TextView
             android:id="@+id/type"
+            text="@{anime.userProgress + anime.episodes}"
             android:layout_width="match_parent"
-            tools:layout_width="210dp"
             android:layout_height="34dp"
 
-            text="@{anime.format}"
-            tools:text="TV"
-            android:textAlignment="textEnd"
-            android:textColor="#FFFFFF"
+            android:fontFamily="sans-serif-medium"
             android:padding="8dp"
 
+            android:textAlignment="textEnd"
+            android:textAllCaps="false"
+
+            tools:textColor="#FF5252"
+
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/media_cover"
-            app:layout_constraintTop_toTopOf="@+id/media_cover" />
+            app:layout_constraintTop_toTopOf="@+id/media_cover"
+            tools:layout_width="210dp"
+            tools:text="2/13" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -37,7 +37,7 @@ class TabCurrentFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
                 val action =
                     LibraryFragmentDirections.actionNavigationDashboardToAnimeDetailsFragment(it)
                 findNavController().navigate(action)
-            }, MediaViewType.SEASONAL
+            }, MediaViewType.PERSONAL
         )
 
         binding.recyclerView.adapter = adapter

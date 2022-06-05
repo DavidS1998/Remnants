@@ -12,4 +12,5 @@ object Configs {
 
     var token = ""
 
+    var mostPopular = 0.0f
 }

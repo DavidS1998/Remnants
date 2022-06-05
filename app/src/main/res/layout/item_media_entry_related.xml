@@ -14,7 +14,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:onClick="@{() -> clickListener.onClick(anime)}">
 
@@ -58,13 +58,13 @@
             android:maxLines="3"/>
 
         <TextView
-            android:id="@+id/next_episode"
+            android:id="@+id/score"
             android:layout_width="match_parent"
             tools:layout_width="210dp"
             android:layout_height="34dp"
 
-            text="@{anime.nextEpisode}"
-            tools:text="Episode 5"
+            text="@{anime.relationType}"
+            tools:text="SEQUEL"
             android:background="#99000000"
             android:textColor="#FFFFFF"
             android:padding="8dp"

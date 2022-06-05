@@ -6,6 +6,7 @@ import com.apollographql.apollo3.exception.ApolloException
 import com.falls.remnants.data.AnilistQueries
 import com.falls.remnants.data.Anime
 import com.falls.remnants.adapter.MediaViewType
+import com.falls.remnants.data.Configs
 import com.falls.remnants.type.MediaSeason
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -37,6 +38,9 @@ class BrowseViewModel : ViewModel() {
     private var _seasonalHasNextPage = true
     private var _upcomingPagesLoaded = 0
     private var _upcomingHasNextPage = true
+
+    // Settings
+    var ShowOnlyUserAnime = false
 
     init {
         currentSeason() // Also calls SEASONAL
@@ -90,6 +94,10 @@ class BrowseViewModel : ViewModel() {
                             it.popularity.toIntOrNull() ?: 0
                         }
 
+                        if (ShowOnlyUserAnime) {
+                            _animeSeasonal.value = _animeSeasonal.value?.filter { it.isOnList }
+                            getMedia(MediaViewType.SEASONAL)
+                        }
                     }
                     MediaViewType.UPCOMING -> {
                         // Don't run if no more pages exist
@@ -108,6 +116,10 @@ class BrowseViewModel : ViewModel() {
                         // Sort list in case it arrives out of order
                         _animeUpcoming.value = _animeUpcoming.value?.sortedByDescending {
                             it.popularity.toIntOrNull() ?: 0
+                        }
+
+                        if (_upcomingPagesLoaded == 1) {
+                            Configs.mostPopular = _animeUpcoming.value?.first()?.popularity?.toFloat() ?: 0f
                         }
 
                     }
@@ -144,6 +156,12 @@ class BrowseViewModel : ViewModel() {
                 getMedia(MediaViewType.SEARCH, query = lastQuery)
             }
         }
+    }
+
+    // Toggle show only user anime
+    fun toggleShowOnlyUserAnime() {
+        ShowOnlyUserAnime = !ShowOnlyUserAnime
+        refreshList(MediaViewType.SEASONAL)
     }
 
     // Season handling
