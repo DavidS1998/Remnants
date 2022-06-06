@@ -191,6 +191,7 @@ object AnilistQueries {
 
                         isOnList = it1.mediaListEntry != null,
                         userStatus = (it1.mediaListEntry?.status)?.toString() ?: "-",
+                        userProgress = (it1.mediaListEntry?.progress)?.toString() ?: "N/A",
 
                         // Convert underscore to space in relationType
                         relationType = it.relationType.toString().replace("_", " "),
@@ -214,13 +215,18 @@ object AnilistQueries {
             return Pair(listOf(), false)
         }
 
+        var actualList: MediaListStatus? = viewList
+        if (viewList == MediaListStatus.UNKNOWN__) {
+            actualList = null
+        }
+
         // Execute and post query
         val response: ApolloResponse<UserAiringQuery.Data> =
             GraphQLapi.getLoggedInInstance(Configs.token)
                 .query(
                     UserAiringQuery(
                         pageNumber = page,
-                        list = viewList,
+                        list = Optional.presentIfNotNull(actualList),
                         user = Configs.username.value.toString(),
                         sort = listOf(order)
                     )
@@ -248,6 +254,7 @@ object AnilistQueries {
                     userProgress = it2.progress?.toString() ?: "?",
                     userStatus = it2.status?.toString() ?: "?",
                     userScore = it2.score?.toInt()?.toString() ?: "?",
+                    updatedTime = Utils.formatDate(it2.media.mediaListEntry?.updatedAt ?: 0),
 
                     nextEpisodeCountdown = it.nextAiringEpisode?.timeUntilAiring?.toString()
                         ?: "-1",

@@ -1,6 +1,7 @@
 package com.falls.remnants.data
 
 import android.app.Activity
+import timber.log.Timber
 
 object Utils {
 
@@ -65,6 +66,23 @@ object Utils {
             11 -> "NOV"
             12 -> "DEC"
             else -> "?"
+        }
+    }
+
+    fun formatDate(timestamp: Int) : String {
+        // Convert timestamp to date
+        val date = timestamp / (60 * 60 * 24)
+        val currentDay = System.currentTimeMillis() / (1000 * 60 * 60 * 24)
+        val days = currentDay - date
+        val months = days / 31
+        val years = months / 12
+
+        // Return singular or plural of time ago
+        return when {
+            years > 0 -> "$years year${if (years > 1) "s" else ""} ago"
+            months > 0 -> "$months month${if (months > 1) "s" else ""} ago"
+            days > 0 -> "$days day${if (days > 1) "s" else ""} ago"
+            else -> "Today"
         }
     }
 

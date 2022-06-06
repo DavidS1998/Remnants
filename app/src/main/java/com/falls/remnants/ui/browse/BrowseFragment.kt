@@ -13,9 +13,12 @@ import androidx.transition.TransitionInflater
 import androidx.viewpager2.widget.ViewPager2
 import com.falls.remnants.R
 import com.falls.remnants.adapter.AdapterTabPager
+import com.falls.remnants.adapter.MediaViewType
 import com.falls.remnants.databinding.FragmentBrowseBinding
+import com.falls.remnants.ui.SeasonDialogFragment
 import com.falls.remnants.ui.SliderDialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
+import timber.log.Timber
 
 
 class BrowseFragment : Fragment() {
@@ -55,6 +58,15 @@ class BrowseFragment : Fragment() {
                 }
             }
         )
+
+        // Listen to needsRefresh
+        viewModel.needsRefresh.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.toolbar.title = viewModel.getSeasonYear()
+                viewModel.refreshList(MediaViewType.SEASONAL)
+                viewModel.needsRefresh.value = false
+            }
+        }
 
         // Initialize and add tab fragments
         pageAdapter.addFragment(TabSeasonalFragment())
@@ -111,6 +123,9 @@ class BrowseFragment : Fragment() {
             }
             R.id.span_size -> {
                 sliderDialog(); true
+            }
+            R.id.select_season -> {
+                selectSeasonDialog(); true
             }
             R.id.search -> {
                 item.expandActionView()
@@ -181,6 +196,10 @@ class BrowseFragment : Fragment() {
                 if (query != null) {
                     viewModel.tempSearch(query)
                     viewPager.setCurrentItem(2, true)
+
+                    // Set title
+                    viewModel.lastQuery = "\"" + query.uppercase() + "\""
+                    binding.toolbar.title = "\"" + query.uppercase() + "\""
                     return true
                 }
                 return false
@@ -195,5 +214,9 @@ class BrowseFragment : Fragment() {
 
     private fun sliderDialog() {
         SliderDialogFragment().show(requireActivity().supportFragmentManager, "grid_size")
+    }
+
+    private fun selectSeasonDialog() {
+        SeasonDialogFragment(viewModel).show(requireActivity().supportFragmentManager, "select_season")
     }
 }

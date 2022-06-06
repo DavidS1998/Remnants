@@ -9,6 +9,7 @@
     <string name="media_cover_image">Media cover image</string>
 
     <string-array name="MediaLists">
+        <item>ACTIVITY</item>
         <item>CURRENT</item>
         <item>COMPLETED</item>
         <item>PAUSED</item>

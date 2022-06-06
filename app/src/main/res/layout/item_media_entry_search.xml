@@ -63,7 +63,7 @@
             tools:layout_width="210dp"
             android:layout_height="34dp"
 
-            text="@{anime.score + `%`}"
+            text="@{anime.score}"
             tools:text="74%"
             android:background="#99000000"
             android:textColor="#FFFFFF"
@@ -71,6 +71,21 @@
 
             app:layout_constraintEnd_toEndOf="@+id/media_cover"
             app:layout_constraintTop_toTopOf="@+id/media_cover" />
+
+        <View
+            android:id="@+id/stripe"
+            android:layout_width="match_parent"
+            tools:layout_width="210dp"
+            android:layout_height="5dp"
+            android:background="#42A5F5"
+
+            android:visibility="gone"
+            tools:visibility="visible"
+
+
+            app:layout_constraintEnd_toEndOf="@+id/media_cover"
+            app:layout_constraintTop_toTopOf="@+id/media_cover" />
+
 
         <TextView
             android:id="@+id/type"

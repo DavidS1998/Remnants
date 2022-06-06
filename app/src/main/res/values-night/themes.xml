@@ -38,4 +38,8 @@
     <style name="PositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
         <item name="android:textColor">@color/purple_200</item>
     </style>
+
+    <style name="MyDialogTheme" parent="AlertDialogTheme">
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
 </resources>

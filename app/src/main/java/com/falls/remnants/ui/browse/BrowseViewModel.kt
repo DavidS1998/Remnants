@@ -31,7 +31,20 @@ class BrowseViewModel : ViewModel() {
 
     // Seasonal filters
     private var _year = 2000
+    var year: Int
+        get() = _year
+        set(value) {
+            _year = value
+        }
+
     private var _setSeason = MediaSeason.WINTER
+    var setSeason: MediaSeason
+        get() = _setSeason
+        set(value) {
+            _setSeason = value
+        }
+
+    var needsRefresh = MutableLiveData(false)
 
     // Paging
     private var _seasonalPagesLoaded = 0
@@ -48,12 +61,19 @@ class BrowseViewModel : ViewModel() {
         getMedia(MediaViewType.UPCOMING) // Preload
     }
 
+    // TODO: This is likely unnecessary
     fun tempSearch(query: String) {
         viewModelScope.launch {
             try {
-                val result = AnilistQueries.search(query)
-                _animeSearch.value = result
-                Timber.d("Search result: $result")
+                val response = AnilistQueries.search(query)
+
+                // Add % after score response
+                val responseWithPercent = response.map {
+                    it.copy(score = it.score + "%")
+                }
+
+                _animeSearch.value = responseWithPercent
+                Timber.d("Search result: $response")
             } catch (e: ApolloException) {
                 Timber.e(e)
             }
@@ -124,7 +144,14 @@ class BrowseViewModel : ViewModel() {
 
                     }
                     MediaViewType.SEARCH -> {
-                        _animeSearch.value = AnilistQueries.search(query)
+                        val response = AnilistQueries.search(query)
+
+                        // Add % after score response
+                        val responseWithPercent = response.map {
+                            it.copy(score = it.score + "%")
+                        }
+
+                        _animeSearch.value = responseWithPercent
                     }
                 }
             } catch (e: ApolloException) {

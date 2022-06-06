@@ -113,6 +113,7 @@ query DetailsQuery($id: Int!) {
                     }
                     mediaListEntry {
                         status
+                        progress
                     }
                 }
             }
@@ -122,7 +123,7 @@ query DetailsQuery($id: Int!) {
 }
 
 # USER LIST
-query UserAiringQuery($pageNumber: Int!, $user: String!, $list: MediaListStatus, $sort: [MediaListSort]) {
+query UserAiringQuery($pageNumber: Int!, $user: String!, $list: MediaListStatus @optional, $sort: [MediaListSort]) {
     page: Page(page: $pageNumber, perPage: 50) {
         pageInfo {
             hasNextPage
@@ -152,6 +153,10 @@ query UserAiringQuery($pageNumber: Int!, $user: String!, $list: MediaListStatus,
                 }
                 episodes
                 status
+
+                mediaListEntry {
+                    updatedAt
+                }
             }
         }
     }

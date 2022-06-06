@@ -34,6 +34,7 @@ data class Anime(
     val userProgress: String = "",
     val userStatus: String = "",
     val userScore: String = "",
+    val updatedTime: String = "",
 
     val genres: String = "",
     val studios: String = "",

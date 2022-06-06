@@ -65,16 +65,20 @@ class LibraryViewModel : ViewModel() {
                         _currentList = list
 
                         var specificSortingOrder: MediaListSort = MediaListSort.MEDIA_POPULARITY_DESC
-                        if (list == 1) { specificSortingOrder = MediaListSort.SCORE_DESC }
-                        else if (list == 0) { specificSortingOrder = MediaListSort.UPDATED_TIME_DESC }
+                        when (list) {
+                            0 -> { specificSortingOrder = MediaListSort.UPDATED_TIME_DESC }
+                            1 -> { specificSortingOrder = MediaListSort.UPDATED_TIME_DESC }
+                            2 -> { specificSortingOrder = MediaListSort.SCORE_DESC }
+                        }
 
                         val stringOfList = when (list) {
-                            0 -> MediaListStatus.CURRENT
-                            1 -> MediaListStatus.COMPLETED
-                            2 -> MediaListStatus.PAUSED
-                            3 -> MediaListStatus.DROPPED
-                            4 -> MediaListStatus.REPEATING
-                            5 -> MediaListStatus.PLANNING
+                            0 -> MediaListStatus.UNKNOWN__
+                            1 -> MediaListStatus.CURRENT
+                            2 -> MediaListStatus.COMPLETED
+                            3 -> MediaListStatus.PAUSED
+                            4 -> MediaListStatus.DROPPED
+                            5 -> MediaListStatus.REPEATING
+                            6 -> MediaListStatus.PLANNING
                             else -> MediaListStatus.UNKNOWN__
                         }
 
@@ -91,6 +95,20 @@ class LibraryViewModel : ViewModel() {
                         // Remove duplicates
                         // TODO: Figure out why duplicates are created for first page
                         _animeLibrary.value = _animeLibrary.value?.distinctBy { it.id } ?: titles
+
+                        if (stringOfList == MediaListStatus.UNKNOWN__ || stringOfList == MediaListStatus.CURRENT) {
+                            // Filter out series with 0 episodes
+                            _animeLibrary.value = _animeLibrary.value?.filter { it.userProgress.toInt() != 0 }
+                            // Put updatedAt into score
+                            _animeLibrary.value = _animeLibrary.value?.map {
+                                it.copy(score = it.updatedTime)
+                            }
+                        } else {
+                            // Append % after score
+                            _animeLibrary.value = _animeLibrary.value?.map {
+                                it.copy(score = it.score + "%")
+                            }
+                        }
 
                         // Sort list in case it arrives out of order
 //                        _animeLibrary.value = _animeLibrary.value?.sortedByDescending {

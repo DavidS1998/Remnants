@@ -88,6 +88,24 @@ class MediaListAdapter(private val clickListener: AdapterClickListener, viewType
                 MediaViewType.SEARCH -> {
                     (binding as ItemMediaEntrySearchBinding).anime = item
                     binding.clickListener = clickListener
+
+                    if (item.isOnList) {
+                        binding.stripe.visibility = View.VISIBLE
+                        // Color based on user status
+                        when (item.userStatus) {
+                            "CURRENT" -> binding.stripe.setBackgroundColor(Color.parseColor("#64DD17"))
+                            "PLANNING" -> binding.stripe.setBackgroundColor(Color.parseColor("#FFEB3B"))
+                            "COMPLETED" -> binding.stripe.setBackgroundColor(Color.parseColor("#42A5F5"))
+                            "DROPPED" -> binding.stripe.setBackgroundColor(Color.parseColor("#F44336"))
+                            else -> binding.stripe.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                        }
+                        // No progress is the same as planning
+                        if (item.userProgress == "0") {
+                            binding.stripe.setBackgroundColor(Color.parseColor("#FFEB3B"))
+                        }
+                    } else {
+                        binding.stripe.visibility = View.GONE
+                    }
                 }
                 MediaViewType.SEASONAL -> {
                     (binding as ItemMediaEntrySeasonalBinding).anime = item
