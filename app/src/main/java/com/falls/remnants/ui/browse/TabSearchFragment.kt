@@ -51,7 +51,7 @@ public class TabSearchFragment : Fragment(), SwipeRefreshLayout.OnRefreshListene
         // Set visible column count
         Configs.columns.observe(viewLifecycleOwner) { columns ->
             binding.recyclerView.layoutManager =
-                GridLayoutManager(requireContext(), columns + 1)
+                GridLayoutManager(requireContext(), columns)
         }
 
         // Observe logged in status

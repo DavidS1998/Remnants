@@ -13,10 +13,8 @@ import androidx.transition.TransitionInflater
 import androidx.viewpager2.widget.ViewPager2
 import com.falls.remnants.R
 import com.falls.remnants.adapter.AdapterTabPager
-import com.falls.remnants.data.Configs
-import com.falls.remnants.data.Utils
 import com.falls.remnants.databinding.FragmentBrowseBinding
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.falls.remnants.ui.SliderDialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
 
 
@@ -178,12 +176,13 @@ class BrowseFragment : Fragment() {
             }
 
             override fun onQueryTextChange(query: String?): Boolean {
-                // Procedural search (disabled for network performance, rate limiting)
-//                if (query != null) {
-//                    viewModel.tempSearch(query)
-//                    viewPager.setCurrentItem(2, true)
-//                    return true
-//                }
+                // Procedural search
+                if (viewPager.currentItem != 2) return false
+                if (query != null) {
+                    viewModel.tempSearch(query)
+                    viewPager.setCurrentItem(2, true)
+                    return true
+                }
                 return false
             }
         })
@@ -194,24 +193,7 @@ class BrowseFragment : Fragment() {
         super.onResume()
     }
 
-    // TODO: Set default based on resolution
-    // Select view mode
     private fun sliderDialog() {
-        val singleItems = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
-
-        MaterialAlertDialogBuilder(
-            requireContext(),
-            com.google.android.material.R.style.Base_ThemeOverlay_AppCompat_Dialog
-        )
-            .setTitle("Number of columns to display")
-            .setPositiveButton("CONFIRM", null)
-            .setSingleChoiceItems(singleItems, Configs.columns.value ?: 0) { item, which ->
-//                viewModel.columns.value = which
-                Configs.columns.value = which
-
-                // Save column value to shared preferences
-                Utils.saveSharedSettings(requireActivity(), "columns", which.toString())
-            }
-            .show()
+        SliderDialogFragment().show(requireActivity().supportFragmentManager, "grid_size")
     }
 }

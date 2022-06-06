@@ -52,7 +52,7 @@ class TabUserListFragment : Fragment(), SwipeRefreshLayout.OnRefreshListener {
         // Set visible column count
         Configs.columns.observe(viewLifecycleOwner) { columns ->
             binding.recyclerView.layoutManager =
-                GridLayoutManager(requireContext(), columns + 1)
+                GridLayoutManager(requireContext(), columns)
             onRefresh()
         }
 

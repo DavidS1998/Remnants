@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
 
         // Apply saved settings
         val value = Utils.getSharedSettings(this, "columns")
-        Configs.columns.value = value.toIntOrNull() ?: 1
+        Configs.columns.value = value.toIntOrNull() ?: 2
 
         // Login attempt
         val intent = intent

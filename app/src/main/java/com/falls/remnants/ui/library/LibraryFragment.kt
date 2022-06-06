@@ -14,9 +14,8 @@ import com.falls.remnants.R
 import com.falls.remnants.adapter.AdapterTabPager
 import com.falls.remnants.adapter.MediaViewType
 import com.falls.remnants.data.Configs
-import com.falls.remnants.data.Utils
 import com.falls.remnants.databinding.FragmentLibraryBinding
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.falls.remnants.ui.SliderDialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import timber.log.Timber
 
@@ -165,24 +164,7 @@ class LibraryFragment : Fragment() {
         }
     }
 
-    // TODO: Set default based on resolution
-    // Select view mode
     private fun sliderDialog() {
-        val singleItems = arrayOf("1", "2", "3", "4", "5", "6", "7", "8", "9", "10")
-//
-        MaterialAlertDialogBuilder(
-            requireContext(),
-            com.google.android.material.R.style.Base_ThemeOverlay_AppCompat_Dialog
-        )
-            .setTitle("Number of columns to display")
-            .setPositiveButton("CONFIRM", null)
-            .setSingleChoiceItems(singleItems, Configs.columns.value ?: 0) { item, which ->
-
-                // Save column value to shared preferences
-                Configs.columns.value = which
-                Utils.saveSharedSettings(requireActivity(), "columns", which.toString())
-
-            }
-            .show()
+        SliderDialogFragment().show(requireActivity().supportFragmentManager, "grid_size")
     }
 }
