@@ -16,7 +16,10 @@ import com.falls.remnants.adapter.MediaViewType
 import com.falls.remnants.data.Anime
 import com.falls.remnants.data.Configs
 import com.falls.remnants.databinding.FragmentAnimeDetailsBinding
+import com.falls.remnants.ui.EditDialogFragment
+import com.falls.remnants.ui.SliderDialogFragment
 import com.falls.remnants.ui.library.LibraryFragmentDirections
+import timber.log.Timber
 
 
 class AnimeDetailsFragment : Fragment() {
@@ -71,6 +74,14 @@ class AnimeDetailsFragment : Fragment() {
             binding.user.visibility = View.GONE
         }
 
+        // Refresh observer
+        viewModel.needsRefresh.observe(viewLifecycleOwner) { needsRefresh ->
+            if (needsRefresh) {
+                viewModel.getAnimeDetails(anime.id)
+                viewModel.needsRefresh.value = false
+            }
+        }
+
         // Recycler view adapter
         adapter = MediaListAdapter(
             AdapterClickListener {
@@ -104,6 +115,16 @@ class AnimeDetailsFragment : Fragment() {
                 )
             startActivity(imdbIntent)
         }
+
+        // Edit button
+        binding.editButton.setOnClickListener {
+            editDialog()
+        }
+
         return binding.root
+    }
+
+    private fun editDialog() {
+        EditDialogFragment(binding.anime ?: anime, viewModel).show(requireActivity().supportFragmentManager, "edit_entry")
     }
 }

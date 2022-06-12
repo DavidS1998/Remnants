@@ -245,12 +245,21 @@
                         android:layout_width="wrap_content">
 
                         <androidx.appcompat.widget.LinearLayoutCompat
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
                             android:padding="8dp"
                             >
                             <!--SCORE-->
+                            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                                android:id="@+id/edit_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:src="@drawable/ic_baseline_edit_24">
+
+                            </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
                             <androidx.appcompat.widget.LinearLayoutCompat
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -689,6 +698,70 @@
                                     app:layout_constraintTop_toTopOf="parent"
                                     android:text="@{anime.studios}"
                                     tools:text="Wit Studio\nKyoto Animation" />
+                                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <!--SOURCE-->
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#CCFFFFFF"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="Source" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    tools:textColor="#4DD0E1"
+                                    SetColorAccent="@{anime.color}"
+
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="@{anime.source}"
+                                    tools:text="Light Novel" />
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <!--DUBBED-->
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="8dp"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#CCFFFFFF"
+                                    android:textSize="16sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="Dubbed" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+
+                                    tools:textColor="#4DD0E1"
+                                    SetColorAccent="@{anime.color}"
+
+                                    android:textSize="16sp"
+                                    android:textStyle="bold"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toEndOf="@+id/cover"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:text="@{anime.dubString}"
+                                    tools:text="Yes" />
                             </androidx.appcompat.widget.LinearLayoutCompat>
 
                         </androidx.appcompat.widget.LinearLayoutCompat>

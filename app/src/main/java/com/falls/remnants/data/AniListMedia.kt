@@ -29,16 +29,21 @@ data class Anime(
     val score: String = "",
     val popularity: String = "",
     val status: String = "",
+    val source: String = "",
 
     val isOnList: Boolean = false,
     val userProgress: String = "",
     val userStatus: String = "",
     val userScore: String = "",
     val updatedTime: String = "",
+    val private: Boolean = false,
 
     val genres: String = "",
     val studios: String = "",
 
     val relations: List<Anime> = listOf(),
     val relationType: String = "",
+
+    val isDubbed: Boolean = false,
+    val dubString: String = "",
 ) : Parcelable

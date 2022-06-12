@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.falls.remnants.R
 import com.falls.remnants.adapter.AdapterTabPager
 import com.falls.remnants.adapter.MediaViewType
+import com.falls.remnants.data.Configs
 import com.falls.remnants.databinding.FragmentBrowseBinding
 import com.falls.remnants.ui.SeasonDialogFragment
 import com.falls.remnants.ui.SliderDialogFragment
@@ -138,6 +139,10 @@ class BrowseFragment : Fragment() {
             }
             R.id.toggle_user_list -> {
                 viewModel.toggleShowOnlyUserAnime()
+                true
+            }
+            R.id.toggle_dubs -> {
+                viewModel.toggleShowOnlyDubs()
                 true
             }
             else -> super.onOptionsItemSelected(item)

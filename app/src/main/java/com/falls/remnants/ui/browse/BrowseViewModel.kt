@@ -54,6 +54,7 @@ class BrowseViewModel : ViewModel() {
 
     // Settings
     var ShowOnlyUserAnime = false
+    var ShowOnlyDubs = false
 
     init {
         currentSeason() // Also calls SEASONAL
@@ -114,9 +115,16 @@ class BrowseViewModel : ViewModel() {
                             it.popularity.toIntOrNull() ?: 0
                         }
 
+                        // Show only listed anime
                         if (ShowOnlyUserAnime) {
                             _animeSeasonal.value = _animeSeasonal.value?.filter { it.isOnList }
                             getMedia(MediaViewType.SEASONAL)
+                        }
+
+                        // Filter out non-dubbed entries
+                        if (ShowOnlyDubs) {
+                            _animeSeasonal.value =
+                                _animeSeasonal.value?.filter { it.isDubbed } ?: titles
                         }
                     }
                     MediaViewType.UPCOMING -> {
@@ -188,6 +196,12 @@ class BrowseViewModel : ViewModel() {
     // Toggle show only user anime
     fun toggleShowOnlyUserAnime() {
         ShowOnlyUserAnime = !ShowOnlyUserAnime
+        refreshList(MediaViewType.SEASONAL)
+    }
+
+    // Toggle show only dubbed anime
+    fun toggleShowOnlyDubs() {
+        ShowOnlyDubs = !ShowOnlyDubs
         refreshList(MediaViewType.SEASONAL)
     }
 

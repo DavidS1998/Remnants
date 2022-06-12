@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.graphics.ColorUtils
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -131,20 +132,37 @@ class MediaListAdapter(private val clickListener: AdapterClickListener, viewType
                 MediaViewType.UPCOMING -> {
                     (binding as ItemMediaEntryUpcomingBinding).anime = item
                     binding.clickListener = clickListener
-                    // Adjust binding.stripe color intensity based on percentage of interest
-                    val interest = item.popularity.toFloat() / Configs.mostPopular
-                    val color = Color.parseColor("#FF5F1F")
-                    val red = Color.red(color)
-                    val green = Color.green(color)
-                    val blue = Color.blue(color)
-                    val alpha = Color.alpha(color)
-                    val newColor = Color.argb(
-                        alpha,
-                        (red * interest).toInt(),
-                        (green * interest).toInt(),
-                        (blue * interest).toInt()
-                    )
-                    binding.stripe.setBackgroundColor(newColor)
+//                    // Adjust binding.stripe color intensity based on percentage of interest
+//                    val interest = item.popularity.toFloat() / Configs.mostPopular
+//                    val color = Color.parseColor("#FF5F1F")
+//                    val red = Color.red(color)
+//                    val green = Color.green(color)
+//                    val blue = Color.blue(color)
+//                    val alpha = Color.alpha(color)
+//                    val newColor = Color.argb(
+//                        alpha,
+//                        (red * interest).toInt(),
+//                        (green * interest).toInt(),
+//                        (blue * interest).toInt()
+//                    )
+//                    binding.stripe.setBackgroundColor(newColor)
+                    if (item.isOnList) {
+                        binding.stripe.visibility = View.VISIBLE
+                        // Color based on user status
+                        when (item.userStatus) {
+                            "CURRENT" -> binding.stripe.setBackgroundColor(Color.parseColor("#64DD17"))
+                            "PLANNING" -> binding.stripe.setBackgroundColor(Color.parseColor("#FFEB3B"))
+                            "COMPLETED" -> binding.stripe.setBackgroundColor(Color.parseColor("#42A5F5"))
+                            "DROPPED" -> binding.stripe.setBackgroundColor(Color.parseColor("#F44336"))
+                            else -> binding.stripe.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                        }
+                        // No progress is the same as planning
+                        if (item.userProgress == "0") {
+                            binding.stripe.setBackgroundColor(Color.parseColor("#FFEB3B"))
+                        }
+                    } else {
+                        binding.stripe.visibility = View.GONE
+                    }
                 }
                 MediaViewType.PERSONAL -> {
                     (binding as ItemMediaEntryPersonalBinding).anime = item
@@ -158,9 +176,9 @@ class MediaListAdapter(private val clickListener: AdapterClickListener, viewType
                     val alpha = Color.alpha(color)
                     val newColor = Color.argb(
                         alpha,
-                        (red * (604800 - item.nextEpisodeCountdown.toInt()) / 604800),
-                        (green * (604800 - item.nextEpisodeCountdown.toInt()) / 604800),
-                        (blue * (604800 - item.nextEpisodeCountdown.toInt()) / 604800)
+                        (red * (604800 - item.nextEpisodeCountdown.toInt()) / 518400),
+                        (green * (604800 - item.nextEpisodeCountdown.toInt()) / 518400),
+                        (blue * (604800 - item.nextEpisodeCountdown.toInt()) / 518400)
                     )
                     binding.stripe.setBackgroundColor(newColor)
 

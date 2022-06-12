@@ -38,18 +38,6 @@ class MainActivity : AppCompatActivity() {
         }
         Timber.d("MainActivity start!")
 
-        val navView: BottomNavigationView = binding.navView
-
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
-        )
-        navView.setupWithNavController(navController)
-
         // Apply saved settings
         val value = Utils.getSharedSettings(this, "columns")
         Configs.columns.value = value.toIntOrNull() ?: 2
@@ -83,6 +71,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+
+        val navView: BottomNavigationView = binding.navView
+
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+            )
+        )
+        navView.setupWithNavController(navController)
     }
 
     private suspend fun login(data: Uri) {

@@ -15,7 +15,7 @@ object AnilistQueries {
         Timber.d("QUERY SENT, PAGE: ${response.data?.page?.pageInfo?.currentPage}")
         Timber.d(response.data?.toString())
 
-        return response.data?.page?.media?.mapNotNull {
+        return response.data?.page?.media?.mapNotNull { it ->
             Anime(
                 id = it?.id!!,
                 engTitle = it.title?.english ?: it.title?.romaji ?: "",
@@ -50,6 +50,8 @@ object AnilistQueries {
                     it.format.toString() == "null" -> "?"
                     else -> it.format.toString()
                 },
+
+                isDubbed = it.characters?.edges?.any { it?.voiceActors?.any() == true } ?: false,
             )
         } ?: listOf()
     }
@@ -139,6 +141,7 @@ object AnilistQueries {
             season = data.season?.toString() ?: "?",
             year = data.seasonYear?.toString() ?: "?",
             episodes = data.episodes?.toString() ?: "?",
+            source = data.source?.toString()?.replace("_", " ") ?: "Unknown",
 
             userProgress = if (data.mediaListEntry?.progress == null) "-" else data.mediaListEntry.progress.toString() + "/" + (data.episodes?.toString() ?: "?"),
             userScore = if (data.mediaListEntry?.score == null) "-" else if (data.mediaListEntry.score == 0.0) "-" else data.mediaListEntry.score.toString() + "%",
@@ -165,6 +168,9 @@ object AnilistQueries {
             bannerPath = data.bannerImage ?: data.coverImage?.extraLarge ?: data.coverImage?.large ?: data.coverImage?.medium ?: "",
 
             genres = data.genres?.joinToString(separator = "\n") ?: "",
+
+            isDubbed = data.characters?.edges?.any { it?.voiceActors?.any() == true } ?: false,
+            dubString = if (data.characters?.edges?.any { it?.voiceActors?.any() == true } == true) "Yes" else "No",
 
             // Only get animation studio names if there are any
             studios = data.studios?.nodes?.filter { it?.isAnimationStudio == true }?.joinToString(separator = "\n") { it?.name ?: "" } ?: "",
@@ -255,6 +261,7 @@ object AnilistQueries {
                     userStatus = it2.status?.toString() ?: "?",
                     userScore = it2.score?.toInt()?.toString() ?: "?",
                     updatedTime = Utils.formatDate(it2.media.mediaListEntry?.updatedAt ?: 0),
+                    private = it2.media.mediaListEntry?.private ?: false,
 
                     nextEpisodeCountdown = it.nextAiringEpisode?.timeUntilAiring?.toString()
                         ?: "-1",
@@ -278,5 +285,16 @@ object AnilistQueries {
         } ?: listOf()
 
         return Pair(titles, response.data?.page?.pageInfo?.hasNextPage == true)
+    }
+
+    suspend fun updateAnime(id: Int, status: MediaListStatus?, score: Double?, progress: Int?) {
+        GraphQLapi.getInstance().mutation(
+            UpdateQueryMutation(
+                id = id,
+                score = Optional.presentIfNotNull(score),
+                status = Optional.presentIfNotNull(status),
+                progress = Optional.presentIfNotNull(progress)
+            )
+        ).execute()
     }
 }

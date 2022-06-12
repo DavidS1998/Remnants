@@ -36,6 +36,20 @@ query BrowseQuery($pageNumber: Int!, $season: MediaSeason @optional, $year: Int 
                 score
                 progress
             }
+
+            # For dub checking
+            characters(role:MAIN) {
+                edges {
+                    node {
+                        name {
+                            full
+                        }
+                    }
+                    voiceActors(language: ENGLISH) {
+                        languageV2
+                    }
+                }
+            }
         }
     }
 }
@@ -77,6 +91,7 @@ query DetailsQuery($id: Int!) {
             day
         }
         status
+        source
 
         mediaListEntry {
             status
@@ -119,6 +134,20 @@ query DetailsQuery($id: Int!) {
             }
 
         }
+
+        # For dub checking
+        characters(role:MAIN) {
+            edges {
+                node {
+                    name {
+                        full
+                    }
+                }
+                voiceActors(language: ENGLISH) {
+                    languageV2
+                }
+            }
+        }
     }
 }
 
@@ -156,9 +185,19 @@ query UserAiringQuery($pageNumber: Int!, $user: String!, $list: MediaListStatus 
 
                 mediaListEntry {
                     updatedAt
+                    private
                 }
             }
         }
+    }
+}
+
+mutation UpdateQuery($id: Int!, $status: MediaListStatus @optional, $score: Float @optional, $progress: Int @optional) {
+    save: SaveMediaListEntry(mediaId: $id, status: $status, score: $score, progress: $progress) {
+        id
+        status
+        score(format: POINT_100)
+        progress
     }
 }
 

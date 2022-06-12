@@ -41,4 +41,9 @@
         android:id="@+id/toggle_user_list"
         android:title="Toggle listed only"
         app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/toggle_dubs"
+        android:title="Toggle dubs only"
+        app:showAsAction="never"/>
 </menu>

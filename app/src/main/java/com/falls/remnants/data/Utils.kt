@@ -2,6 +2,8 @@ package com.falls.remnants.data
 
 import android.app.Activity
 import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Utils {
 
@@ -39,6 +41,7 @@ object Utils {
     fun formatRemaining(timestamp: Int) : String? {
         if (timestamp < 0) return null
 
+        // Timestamp is in remaining seconds
         val days = timestamp / (60 * 60 * 24)
         val hours = (timestamp % (60 * 60 * 24)) / (60 * 60)
         val minutes = (timestamp % (60 * 60)) / 60
@@ -48,7 +51,15 @@ object Utils {
         if (hours >= 1) remaining = "Next in $hours hours"
         if (days >= 1) remaining = "Next in $days days"
 
+        // Get day of the week at timestamp
+        val dayOfWeek = getDayOfWeek(timestamp)
+        if (dayOfWeek != null) remaining = "$dayOfWeek\n$remaining"
+
         return remaining
+    }
+
+    fun getDayOfWeek(timestamp: Int) : String? {
+        return SimpleDateFormat("EEEE", Locale.ENGLISH).format(System.currentTimeMillis() + (timestamp * 1000)) + "s"
     }
 
     fun formatMonth(month: Int) : String {

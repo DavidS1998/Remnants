@@ -58,7 +58,7 @@
             android:maxLines="3"/>
 
         <TextView
-            android:id="@+id/next_episode"
+            android:id="@+id/score"
             android:layout_width="match_parent"
             tools:layout_width="210dp"
             android:layout_height="34dp"
@@ -85,6 +85,7 @@
 
             app:layout_constraintEnd_toEndOf="@+id/media_cover"
             app:layout_constraintTop_toTopOf="@+id/media_cover" />
+
 
         <TextView
             android:id="@+id/type"

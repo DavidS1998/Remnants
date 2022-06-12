@@ -63,7 +63,6 @@ public class TabSearchFragment : Fragment(), SwipeRefreshLayout.OnRefreshListene
             }
         }
 
-
         // Pull to refresh
         binding.swipeRefreshLayout.setOnRefreshListener(this)
 

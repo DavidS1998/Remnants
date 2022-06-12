@@ -96,6 +96,9 @@ class LibraryViewModel : ViewModel() {
                         // TODO: Figure out why duplicates are created for first page
                         _animeLibrary.value = _animeLibrary.value?.distinctBy { it.id } ?: titles
 
+                        // Remove private entries
+                        _animeLibrary.value = _animeLibrary.value?.filter { !it.private } ?: titles
+
                         if (stringOfList == MediaListStatus.UNKNOWN__ || stringOfList == MediaListStatus.CURRENT) {
                             // Filter out series with 0 episodes
                             _animeLibrary.value = _animeLibrary.value?.filter { it.userProgress.toInt() != 0 }

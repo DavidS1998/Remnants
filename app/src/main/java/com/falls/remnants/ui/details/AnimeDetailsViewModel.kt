@@ -29,6 +29,8 @@ class AnimeDetailsViewModel(
     val relatedAnime: LiveData<List<Anime>>
         get() = _relatedAnime
 
+    var needsRefresh = MutableLiveData(false)
+
     // Fetches the details from the server
     fun getAnimeDetails(id: Int) {
         viewModelScope.launch {
