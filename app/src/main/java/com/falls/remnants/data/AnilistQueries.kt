@@ -152,6 +152,7 @@ object AnilistQueries {
             ) ?: "",
             nextEpisodeCountdown = data.nextAiringEpisode?.timeUntilAiring?.toString() ?: "-1",
 
+            duration = data.duration?.toString() ?: "?",
 
             start = ((data.startDate?.month?.let { Utils.formatMonth(it) })?: "?") +
                 " " + (data.startDate?.day?.toString() ?: "?") +
@@ -272,6 +273,81 @@ object AnilistQueries {
                         it.status?.name ?: ""
                     ),
                     latestEpisode = if (it.nextAiringEpisode?.episode.toString() != "null") it.nextAiringEpisode?.episode.toString() else "-1",
+
+                    coverPath = it.coverImage?.extraLarge ?: it.coverImage?.large
+                    ?: it.coverImage?.medium ?: "", // XL > L > M > None
+                    format = when {
+                        it.format.toString() == "TV_SHORT" -> "SHORT"
+                        it.format.toString() == "null" -> "?"
+                        else -> it.format.toString()
+                    },
+                )
+            }
+        } ?: listOf()
+
+        return Pair(titles, response.data?.page?.pageInfo?.hasNextPage == true)
+    }
+
+
+    // User list query with unique formatting
+    suspend fun remnants(
+        page: Int,
+        order: MediaListSort = MediaListSort.MEDIA_POPULARITY_DESC
+    ): Pair<List<Anime>, Boolean> {
+
+        // Return if not logged in
+        if (Configs.loggedIn.value == false) {
+            return Pair(listOf(), false)
+        }
+
+
+        // Execute and post query
+        val response: ApolloResponse<RelationsQuery.Data> =
+            GraphQLapi.getLoggedInInstance(Configs.token)
+                .query(
+                    RelationsQuery(
+                        pageNumber = page,
+                        user = Configs.username.value.toString(),
+                        sort = listOf(order)
+                    )
+                )
+                .execute()
+
+        Timber.d("CURRENT QUERY SENT")
+
+        // Formatting
+        val titles = response.data?.page?.mediaList?.mapNotNull { it2 ->
+            it2?.media?.let { it ->
+                Anime(
+                    id = it.id,
+                    engTitle = it.title?.english ?: it.title?.romaji ?: "",
+                    japTitle = if (it.title?.romaji.equals(
+                            it.title?.english ?: it.title?.romaji
+                        )
+                    ) "" // If same, empty
+                    else it.title?.romaji ?: "",
+
+                    status = it.status?.toString() ?: "?",
+                    score = it.averageScore?.toString() ?: "0",
+
+                    userStatus = it2.status?.toString() ?: "?",
+                    private = it2.media.mediaListEntry?.private ?: false,
+
+                    relations = it.relations?.edges?.mapNotNull { it3 ->
+                        it3?.node?.let { it4 ->
+                            Anime(
+                                id = it4.id,
+                                format = it4.format.toString(),
+                                type = it4.type.toString(),
+                                engTitle = it4.title?.english ?: it4.title?.romaji ?: "",
+                                relationType = it3.relationType.toString().replace("_", " "),
+                                status = it4.status?.toString() ?: "?",
+                                userStatus = it4.mediaListEntry?.status?.toString() ?: "?",
+                                coverPath = it4.coverImage?.extraLarge ?: it4.coverImage?.large
+                                    ?: it4.coverImage?.medium ?: "", // XL > L > M > None
+                            )
+                        }
+                    } ?: listOf(),
 
                     coverPath = it.coverImage?.extraLarge ?: it.coverImage?.large
                     ?: it.coverImage?.medium ?: "", // XL > L > M > None

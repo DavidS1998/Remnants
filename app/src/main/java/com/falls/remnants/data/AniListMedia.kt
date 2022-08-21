@@ -15,12 +15,14 @@ data class Anime(
     val color: String = "",
 
     val format: String = "",
+    val type: String = "",
     val episodes: String = "",
     val latestEpisode: String = "",
     val nextEpisode: String = "",
     val nextEpisodeCountdown: String = "",
     val season: String = "",
     val year: String = "",
+    val duration: String = "",
 
     val start: String = "",
     val end: String = "",

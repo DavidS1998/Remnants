@@ -80,6 +80,7 @@ query DetailsQuery($id: Int!) {
         format
         seasonYear
         season
+        duration
         startDate {
             year
             month
@@ -186,6 +187,65 @@ query UserAiringQuery($pageNumber: Int!, $user: String!, $list: MediaListStatus 
                 mediaListEntry {
                     updatedAt
                     private
+                }
+            }
+        }
+    }
+}
+
+# REMNANTS
+query RelationsQuery($pageNumber: Int!, $user: String!, $sort: [MediaListSort]) {
+    page: Page(page: $pageNumber, perPage: 50) {
+        pageInfo {
+            hasNextPage
+        }
+
+        mediaList(userName: $user, status: COMPLETED, sort: $sort, type: ANIME) {
+            status
+
+            media {
+                id
+                title {
+                    romaji
+                    english
+                }
+                format
+                status
+                averageScore
+                coverImage {
+                    extraLarge
+                    large
+                    medium
+                    color
+                }
+
+                mediaListEntry {
+                    private
+                }
+
+                relations {
+                    edges {
+                        relationType
+                        node {
+                            id
+                            format
+                            type
+                            status
+                            coverImage {
+                                extraLarge
+                                large
+                                medium
+                                color
+                            }
+                            title {
+                                romaji
+                                english
+                            }
+                            mediaListEntry {
+                                status
+                            }
+                        }
+                    }
                 }
             }
         }

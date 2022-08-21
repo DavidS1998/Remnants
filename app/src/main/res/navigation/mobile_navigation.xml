@@ -29,7 +29,11 @@
         android:id="@+id/navigation_notifications"
         android:name="com.falls.remnants.ui.tools.ToolsFragment"
         android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_tools" />
+        tools:layout="@layout/fragment_tools" >
+        <action
+            android:id="@+id/action_navigation_notifications_to_animeDetailsFragment"
+            app:destination="@id/animeDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/animeDetailsFragment"
         android:name="com.falls.remnants.ui.details.AnimeDetailsFragment"

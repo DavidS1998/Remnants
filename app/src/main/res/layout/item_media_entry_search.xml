@@ -63,7 +63,7 @@
             tools:layout_width="210dp"
             android:layout_height="34dp"
 
-            text="@{anime.score}"
+            text="@{anime.relationType}"
             tools:text="74%"
             android:background="#99000000"
             android:textColor="#FFFFFF"

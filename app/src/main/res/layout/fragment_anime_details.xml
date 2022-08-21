@@ -482,6 +482,38 @@
                                 tools:text="24" />
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
+                        <!--EPISODE LENGTH-->
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="#CCFFFFFF"
+                                android:textSize="16sp"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="Length" />
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+
+                                tools:textColor="#4DD0E1"
+                                SetColorAccent="@{anime.color}"
+
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@+id/cover"
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:text="@{anime.duration + ` min`}"
+                                tools:text="15 min" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
                         <!--SEASON-->
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
